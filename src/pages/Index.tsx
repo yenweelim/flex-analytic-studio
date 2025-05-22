@@ -3,7 +3,7 @@ import React from 'react';
 import Dashboard from '../components/Dashboard';
 import { toast } from '@/components/ui/use-toast';
 
-// Import CSS for react-grid-layout
+// CSS imports will be provided by react-grid-layout package
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 

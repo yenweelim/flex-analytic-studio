@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   ResponsiveContainer, 
@@ -29,6 +28,7 @@ interface ChartWidgetProps {
   customData?: any[];
   onRemove: (id: string) => void;
   onConfigure: (id: string) => void;
+  onUpdateWidget?: (id: string, config: any) => void;
 }
 
 export const ChartWidget: React.FC<ChartWidgetProps> = ({
@@ -38,7 +38,8 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
   config,
   customData,
   onRemove,
-  onConfigure
+  onConfigure,
+  onUpdateWidget
 }) => {
   // Use the provided config or fallback to a default based on type
   const chartConfig = config || defaultChartConfigs[
@@ -210,6 +211,7 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
       type={type}
       onRemove={onRemove}
       onConfigure={onConfigure}
+      onUpdateWidget={onUpdateWidget}
     >
       {renderChart()}
     </Widget>

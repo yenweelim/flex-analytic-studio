@@ -21,15 +21,15 @@ const Dashboard: React.FC<DashboardProps> = ({ onSaveLayout }) => {
   const widgetGridRef = React.useRef<any>(null);
   
   const handleAddWidget = (type: string) => {
-    // Trigger the add widget function on the WidgetGrid
-    if (window.handleAddWidget) {
-      window.handleAddWidget(type);
+    // Trigger the add widget function on the WidgetGrid through ref
+    if (widgetGridRef.current?.handleAddWidget) {
+      widgetGridRef.current.handleAddWidget(type);
     }
   };
 
   const handleShowAICreator = () => {
-    if (window.showAICreator) {
-      window.showAICreator();
+    if (widgetGridRef.current?.handleShowAICreator) {
+      widgetGridRef.current.handleShowAICreator();
     }
   };
   
@@ -84,7 +84,11 @@ const Dashboard: React.FC<DashboardProps> = ({ onSaveLayout }) => {
         
         {/* Main dashboard content */}
         <main className="flex-1 overflow-auto p-6">
-          <WidgetGrid key={widgetGridKey} onShowAICreator={handleShowAICreator} />
+          <WidgetGrid 
+            key={widgetGridKey} 
+            onShowAICreator={handleShowAICreator}
+            ref={widgetGridRef}
+          />
         </main>
       </div>
     </div>

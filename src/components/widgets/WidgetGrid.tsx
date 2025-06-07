@@ -1,5 +1,4 @@
-
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useImperativeHandle, forwardRef } from 'react';
 import { Responsive, WidthProvider } from 'react-grid-layout';
 import { ChartWidget } from './ChartWidget';
 import { TableWidget } from './TableWidget';
@@ -45,9 +44,14 @@ interface WidgetGridProps {
   onShowAICreator?: () => void;
 }
 
+interface WidgetGridRef {
+  handleAddWidget: (type: string) => void;
+  handleShowAICreator: () => void;
+}
+
 let widgetCounter = 1;
 
-const WidgetGrid: React.FC<WidgetGridProps> = ({ onLayoutChange, onShowAICreator }) => {
+const WidgetGrid = forwardRef<WidgetGridRef, WidgetGridProps>(({ onLayoutChange, onShowAICreator }, ref) => {
   // Initialize with some default widgets
   const [widgets, setWidgets] = useState<WidgetData[]>([
     { id: 'revenue-chart', title: 'Monthly Revenue', type: 'line' },
@@ -84,6 +88,16 @@ const WidgetGrid: React.FC<WidgetGridProps> = ({ onLayoutChange, onShowAICreator
     
     setLayouts(newLayout);
   };
+
+  const handleShowAICreatorInternal = () => {
+    setShowAICreator(true);
+  };
+
+  // Expose functions to parent component
+  useImperativeHandle(ref, () => ({
+    handleAddWidget,
+    handleShowAICreator: handleShowAICreatorInternal,
+  }));
 
   const handleCreateAIWidget = useCallback((config: {
     title: string;
@@ -125,13 +139,7 @@ const WidgetGrid: React.FC<WidgetGridProps> = ({ onLayoutChange, onShowAICreator
   }, [widgets, layouts]);
   
   // Expose the handleAddWidget function for parent components
-  React.useEffect(() => {
-    if (onShowAICreator) {
-      // This allows parent components to trigger the AI creator
-      window.showAICreator = () => setShowAICreator(true);
-      window.handleAddWidget = handleAddWidget;
-    }
-  }, [onShowAICreator]);
+  
   
   const handleRemoveWidget = useCallback((id: string) => {
     setWidgets(widgets.filter(widget => widget.id !== id));
@@ -227,6 +235,8 @@ const WidgetGrid: React.FC<WidgetGridProps> = ({ onLayoutChange, onShowAICreator
       />
     </div>
   );
-};
+});
+
+WidgetGrid.displayName = 'WidgetGrid';
 
 export default WidgetGrid;

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ChevronDown, GripVertical, Settings, X, Sparkles, Database } from 'lucide-react';
+import { ChevronDown, GripVertical, Settings, X, Sparkles, Database, Wand2, Bot } from 'lucide-react';
 import { 
   DropdownMenu,
   DropdownMenuContent,
@@ -34,6 +34,9 @@ export const Widget: React.FC<WidgetProps> = ({
 }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
+  const [showAIDescription, setShowAIDescription] = useState(false);
+  const [aiDescription, setAiDescription] = useState('');
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const handleSettingsClick = () => {
     setIsFlipped(true);
@@ -41,6 +44,28 @@ export const Widget: React.FC<WidgetProps> = ({
 
   const handleBackClick = () => {
     setIsFlipped(false);
+  };
+
+  const handleMagicClick = async () => {
+    setShowAIDescription(true);
+    setIsGenerating(true);
+    setAiDescription('');
+
+    // Simulate AI streaming text
+    const descriptions = [
+      "This chart provides valuable insights into your data patterns. ",
+      "The visualization reveals trends that can help inform strategic decisions. ",
+      "Key performance indicators are clearly displayed for easy analysis. ",
+      "The data shows meaningful correlations that drive business value. ",
+      "Interactive elements enhance the user experience and data exploration."
+    ];
+
+    for (let i = 0; i < descriptions.length; i++) {
+      await new Promise(resolve => setTimeout(resolve, 500));
+      setAiDescription(prev => prev + descriptions[i]);
+    }
+    
+    setIsGenerating(false);
   };
 
   return (
@@ -68,6 +93,16 @@ export const Widget: React.FC<WidgetProps> = ({
                   <ChevronDown className={cn("h-4 w-4 transition-transform", 
                     isCollapsed ? "" : "transform rotate-180"
                   )} />
+                </Button>
+
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-7 w-7"
+                  onClick={handleMagicClick}
+                  title="Generate AI Description"
+                >
+                  <Wand2 className="h-4 w-4" />
                 </Button>
                 
                 <Button 
@@ -99,6 +134,22 @@ export const Widget: React.FC<WidgetProps> = ({
             isCollapsed ? "h-0 p-0 overflow-hidden" : ""
           )}>
             {children}
+            
+            {/* AI Description Box */}
+            {showAIDescription && (
+              <div className="mt-4 p-3 bg-muted rounded-lg border">
+                <div className="flex items-center gap-2 mb-2">
+                  <Bot className="h-4 w-4 text-primary" />
+                  <span className="text-sm font-medium">AI Insights</span>
+                </div>
+                <div className="text-sm text-muted-foreground min-h-[60px]">
+                  {aiDescription}
+                  {isGenerating && (
+                    <span className="inline-block w-2 h-4 bg-primary ml-1 animate-pulse" />
+                  )}
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -152,6 +203,7 @@ const WidgetConfigurationPanel: React.FC<WidgetConfigurationPanelProps> = ({
   const [mode, setMode] = useState<'ai' | 'sql'>('ai');
   const [userInput, setUserInput] = useState('');
   const [sqlInput, setSqlInput] = useState('');
+  const [autoGenerateAI, setAutoGenerateAI] = useState(false);
 
   return (
     <div className="space-y-4 h-full flex flex-col">
@@ -213,7 +265,22 @@ const WidgetConfigurationPanel: React.FC<WidgetConfigurationPanelProps> = ({
         </div>
       )}
 
+      {/* Auto-generate AI description setting */}
       <div className="pt-2 border-t">
+        <div className="flex items-center justify-between mb-3">
+          <label className="text-sm font-medium">Auto-generate AI insights</label>
+          <Button
+            variant={autoGenerateAI ? "default" : "outline"}
+            size="sm"
+            onClick={() => setAutoGenerateAI(!autoGenerateAI)}
+            className="h-6 text-xs"
+          >
+            {autoGenerateAI ? "ON" : "OFF"}
+          </Button>
+        </div>
+        <p className="text-xs text-muted-foreground mb-3">
+          Automatically generate AI descriptions when data refreshes
+        </p>
         <Button 
           variant="outline" 
           size="sm" 

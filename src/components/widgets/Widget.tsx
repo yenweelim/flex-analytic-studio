@@ -79,7 +79,9 @@ export const Widget: React.FC<WidgetProps> = ({
           <CardHeader className="p-3 pb-0">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <GripVertical className="h-4 w-4 text-muted-foreground cursor-grab" />
+                <div className="react-grid-draghandle">
+                  <GripVertical className="h-4 w-4 text-muted-foreground cursor-grab hover:cursor-grabbing" />
+                </div>
                 <CardTitle className="text-md font-medium">{title}</CardTitle>
               </div>
               

@@ -62,6 +62,7 @@ const WidgetGrid = forwardRef<WidgetGridRef, WidgetGridProps>(({ onLayoutChange,
         useCSSTransforms={true}
         compactType="vertical"
         margin={[16, 16]}
+        dragHandleClassName="react-grid-draghandle"
       >
         {widgets.map(widget => (
           <div key={widget.id}>

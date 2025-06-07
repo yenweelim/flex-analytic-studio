@@ -4,6 +4,7 @@ import { Responsive, WidthProvider } from 'react-grid-layout';
 import { ChartWidget } from './ChartWidget';
 import { TableWidget } from './TableWidget';
 import { WidgetConfigurator } from '../configurator/WidgetConfigurator';
+import { AIWidgetCreator } from '../configurator/AIWidgetCreator';
 import { ChartConfig } from '@/utils/chartUtils';
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
@@ -35,15 +36,18 @@ interface WidgetData {
   title: string;
   type: string;
   config?: ChartConfig;
+  sql?: string;
+  data?: any[];
 }
 
 interface WidgetGridProps {
   onLayoutChange?: (layout: any) => void;
+  onShowAICreator?: () => void;
 }
 
 let widgetCounter = 1;
 
-const WidgetGrid: React.FC<WidgetGridProps> = ({ onLayoutChange }) => {
+const WidgetGrid: React.FC<WidgetGridProps> = ({ onLayoutChange, onShowAICreator }) => {
   // Initialize with some default widgets
   const [widgets, setWidgets] = useState<WidgetData[]>([
     { id: 'revenue-chart', title: 'Monthly Revenue', type: 'line' },
@@ -54,11 +58,17 @@ const WidgetGrid: React.FC<WidgetGridProps> = ({ onLayoutChange }) => {
   
   const [layouts, setLayouts] = useState(defaultLayouts);
   const [activeConfigWidget, setActiveConfigWidget] = useState<string | null>(null);
+  const [showAICreator, setShowAICreator] = useState(false);
   
   // Find the widget currently being configured
   const activeWidget = activeConfigWidget ? widgets.find(w => w.id === activeConfigWidget) : null;
   
   const handleAddWidget = (type: string) => {
+    if (type === 'ai') {
+      setShowAICreator(true);
+      return;
+    }
+    
     const newId = `widget-${widgetCounter++}`;
     const newTitle = type === 'table' ? 'Data Table' : `${type.charAt(0).toUpperCase() + type.slice(1)} Chart`;
     
@@ -74,6 +84,54 @@ const WidgetGrid: React.FC<WidgetGridProps> = ({ onLayoutChange }) => {
     
     setLayouts(newLayout);
   };
+
+  const handleCreateAIWidget = useCallback((config: {
+    title: string;
+    type: 'line' | 'bar' | 'pie' | 'area';
+    sql: string;
+    data: any[];
+    dataKey: string;
+    secondaryDataKey?: string;
+    xAxisKey: string;
+  }) => {
+    const newId = `ai-widget-${widgetCounter++}`;
+    
+    const newWidget: WidgetData = {
+      id: newId,
+      title: config.title,
+      type: config.type,
+      sql: config.sql,
+      data: config.data,
+      config: {
+        type: config.type,
+        dataKey: config.dataKey,
+        secondaryDataKey: config.secondaryDataKey,
+        title: config.title,
+        xAxisKey: config.xAxisKey,
+        colors: ['#9b87f5', '#7E69AB', '#4CAF50', '#FFC107'],
+      }
+    };
+    
+    setWidgets([...widgets, newWidget]);
+    
+    // Add layout item for the new widget
+    const newLayout = {
+      lg: [...layouts.lg, { i: newId, x: 0, y: Infinity, w: 6, h: 2, minW: 3, minH: 2 }],
+      md: [...layouts.md, { i: newId, x: 0, y: Infinity, w: 6, h: 2, minW: 3, minH: 2 }],
+      sm: [...layouts.sm, { i: newId, x: 0, y: Infinity, w: 6, h: 2, minW: 3, minH: 2 }],
+    };
+    
+    setLayouts(newLayout);
+  }, [widgets, layouts]);
+  
+  // Expose the handleAddWidget function for parent components
+  React.useEffect(() => {
+    if (onShowAICreator) {
+      // This allows parent components to trigger the AI creator
+      window.showAICreator = () => setShowAICreator(true);
+      window.handleAddWidget = handleAddWidget;
+    }
+  }, [onShowAICreator]);
   
   const handleRemoveWidget = useCallback((id: string) => {
     setWidgets(widgets.filter(widget => widget.id !== id));
@@ -143,6 +201,7 @@ const WidgetGrid: React.FC<WidgetGridProps> = ({ onLayoutChange }) => {
                 title={widget.title}
                 type={widget.type as 'line' | 'bar' | 'pie' | 'area'}
                 config={widget.config}
+                customData={widget.data}
                 onRemove={handleRemoveWidget}
                 onConfigure={handleConfigureWidget}
               />
@@ -159,6 +218,12 @@ const WidgetGrid: React.FC<WidgetGridProps> = ({ onLayoutChange }) => {
         widgetTitle={activeWidget?.title || ''}
         config={activeWidget?.config}
         onUpdateConfig={handleUpdateConfig}
+      />
+
+      <AIWidgetCreator
+        isOpen={showAICreator}
+        onClose={() => setShowAICreator(false)}
+        onCreateWidget={handleCreateAIWidget}
       />
     </div>
   );

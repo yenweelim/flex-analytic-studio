@@ -26,6 +26,7 @@ interface ChartWidgetProps {
   title: string;
   type: 'line' | 'bar' | 'pie' | 'area';
   config?: ChartConfig;
+  customData?: any[];
   onRemove: (id: string) => void;
   onConfigure: (id: string) => void;
 }
@@ -35,6 +36,7 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
   title,
   type,
   config,
+  customData,
   onRemove,
   onConfigure
 }) => {
@@ -45,13 +47,16 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
     type === 'pie' ? 'categories' :
     'customers'
   ];
+
+  // Use custom data if provided, otherwise fall back to default sample data
+  const chartData = customData || (type === 'pie' ? categoryData : salesData);
   
   const renderChart = () => {
     switch (type) {
       case 'line':
         return (
           <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={salesData} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
+            <LineChart data={chartData} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
               <XAxis 
                 dataKey={chartConfig.xAxisKey} 
@@ -92,7 +97,7 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
       case 'bar':
         return (
           <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={salesData} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
+            <BarChart data={chartData} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
               <XAxis 
                 dataKey={chartConfig.xAxisKey}
@@ -129,7 +134,7 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
           <ResponsiveContainer width="100%" height={300}>
             <PieChart margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
               <Pie
-                data={categoryData}
+                data={chartData}
                 dataKey={chartConfig.dataKey}
                 nameKey={chartConfig.xAxisKey}
                 cx="50%"
@@ -140,7 +145,7 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
                 paddingAngle={5}
                 label
               >
-                {categoryData.map((entry, index) => (
+                {chartData.map((entry, index) => (
                   <Cell 
                     key={`cell-${index}`} 
                     fill={chartConfig.colors[index % chartConfig.colors.length]} 
@@ -156,7 +161,7 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
       case 'area':
         return (
           <ResponsiveContainer width="100%" height={300}>
-            <AreaChart data={salesData} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
+            <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
               <XAxis 
                 dataKey={chartConfig.xAxisKey}

@@ -18,9 +18,19 @@ interface DashboardProps {
 const Dashboard: React.FC<DashboardProps> = ({ onSaveLayout }) => {
   const [sidebarContent, setSidebarContent] = React.useState<boolean>(true);
   const [widgetGridKey, setWidgetGridKey] = React.useState<number>(0);
+  const widgetGridRef = React.useRef<any>(null);
   
   const handleAddWidget = (type: string) => {
-    // This function is passed down to the Sidebar component
+    // Trigger the add widget function on the WidgetGrid
+    if (window.handleAddWidget) {
+      window.handleAddWidget(type);
+    }
+  };
+
+  const handleShowAICreator = () => {
+    if (window.showAICreator) {
+      window.showAICreator();
+    }
   };
   
   return (
@@ -42,6 +52,9 @@ const Dashboard: React.FC<DashboardProps> = ({ onSaveLayout }) => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={handleShowAICreator}>
+                  <ChartLine className="h-4 w-4 mr-2" /> AI-Powered Widget
+                </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => handleAddWidget('line')}>
                   <ChartLine className="h-4 w-4 mr-2" /> Line Chart
                 </DropdownMenuItem>
@@ -71,7 +84,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onSaveLayout }) => {
         
         {/* Main dashboard content */}
         <main className="flex-1 overflow-auto p-6">
-          <WidgetGrid key={widgetGridKey} />
+          <WidgetGrid key={widgetGridKey} onShowAICreator={handleShowAICreator} />
         </main>
       </div>
     </div>

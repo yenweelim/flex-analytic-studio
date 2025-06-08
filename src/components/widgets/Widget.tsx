@@ -1,8 +1,7 @@
-
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ChevronDown, GripVertical, Settings, X, Sparkles, Database, Wand2, Bot } from 'lucide-react';
+import { ChevronDown, GripVertical, Settings, X, Wand2, Bot } from 'lucide-react';
 import { 
   DropdownMenu,
   DropdownMenuContent,
@@ -10,6 +9,7 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
+import { AIDescriptionPanel } from './AIDescriptionPanel';
 
 export interface WidgetProps {
   id: string;
@@ -37,6 +37,29 @@ export const Widget: React.FC<WidgetProps> = ({
   const [showAIDescription, setShowAIDescription] = useState(false);
   const [aiDescription, setAiDescription] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
+  const [showFloatingPanel, setShowFloatingPanel] = useState(false);
+  const [isSmallWidget, setIsSmallWidget] = useState(false);
+  
+  const widgetRef = useRef<HTMLDivElement>(null);
+
+  // Check if widget is too small to show AI description inline
+  useEffect(() => {
+    const checkSize = () => {
+      if (widgetRef.current) {
+        const rect = widgetRef.current.getBoundingClientRect();
+        setIsSmallWidget(rect.height < 300); // Consider small if height < 300px
+      }
+    };
+
+    checkSize();
+    const resizeObserver = new ResizeObserver(checkSize);
+    if (widgetRef.current) {
+      resizeObserver.observe(widgetRef.current);
+    }
+
+    return () => resizeObserver.disconnect();
+  }, []);
 
   const handleSettingsClick = () => {
     setIsFlipped(true);
@@ -47,7 +70,12 @@ export const Widget: React.FC<WidgetProps> = ({
   };
 
   const handleMagicClick = async () => {
-    setShowAIDescription(true);
+    if (isSmallWidget) {
+      setShowFloatingPanel(true);
+    } else {
+      setShowAIDescription(true);
+    }
+    
     setIsGenerating(true);
     setAiDescription('');
 
@@ -68,121 +96,149 @@ export const Widget: React.FC<WidgetProps> = ({
     setIsGenerating(false);
   };
 
-  return (
-    <div className="h-full perspective-1000">
-      <div className={cn(
-        "relative w-full h-full transition-transform duration-500 transform-style-preserve-3d",
-        isFlipped ? "rotate-y-180" : ""
-      )}>
-        {/* Front side - Normal widget view */}
-        <Card className={cn("absolute inset-0 h-full shadow-md backface-hidden bg-card border-primary/20", className)}>
-          <CardHeader className="p-3 pb-0">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="widget-drag-handle cursor-grab hover:cursor-grabbing">
-                  <GripVertical className="h-4 w-4 text-muted-foreground" />
-                </div>
-                <CardTitle className="text-md font-medium text-primary">{title}</CardTitle>
-              </div>
-              
-              <div className="flex items-center gap-1 widget-controls">
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="h-7 w-7 hover:bg-primary/10"
-                  onClick={() => setIsCollapsed(!isCollapsed)}
-                >
-                  <ChevronDown className={cn("h-4 w-4 transition-transform text-primary", 
-                    isCollapsed ? "" : "transform rotate-180"
-                  )} />
-                </Button>
+  const handleMouseEnter = () => {
+    setIsHovering(true);
+    if (isSmallWidget && aiDescription) {
+      setShowFloatingPanel(true);
+    }
+  };
 
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="h-7 w-7 hover:bg-primary/10"
-                  onClick={handleMagicClick}
-                  title="Generate AI Description"
-                >
-                  <Wand2 className="h-4 w-4 text-primary" />
-                </Button>
+  const handleMouseLeave = () => {
+    setIsHovering(false);
+    if (isSmallWidget && !isGenerating) {
+      setShowFloatingPanel(false);
+    }
+  };
+
+  return (
+    <>
+      <div 
+        ref={widgetRef}
+        className="h-full perspective-1000"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        <div className={cn(
+          "relative w-full h-full transition-transform duration-500 transform-style-preserve-3d",
+          isFlipped ? "rotate-y-180" : ""
+        )}>
+          {/* Front side - Normal widget view */}
+          <Card className={cn("absolute inset-0 h-full shadow-md backface-hidden bg-card border-primary/20", className)}>
+            <CardHeader className="p-3 pb-0">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="widget-drag-handle cursor-grab hover:cursor-grabbing">
+                    <GripVertical className="h-4 w-4 text-muted-foreground" />
+                  </div>
+                  <CardTitle className="text-md font-medium text-primary">{title}</CardTitle>
+                </div>
                 
+                <div className="flex items-center gap-1 widget-controls">
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="h-7 w-7 hover:bg-primary/10"
+                    onClick={() => setIsCollapsed(!isCollapsed)}
+                  >
+                    <ChevronDown className={cn("h-4 w-4 transition-transform text-primary", 
+                      isCollapsed ? "" : "transform rotate-180"
+                    )} />
+                  </Button>
+
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="h-7 w-7 hover:bg-primary/10"
+                    onClick={handleMagicClick}
+                    title="Generate AI Description"
+                  >
+                    <Wand2 className="h-4 w-4 text-primary" />
+                  </Button>
+                  
+                  <Button 
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7 hover:bg-primary/10"
+                    onClick={handleSettingsClick}
+                  >
+                    <Settings className="h-4 w-4 text-primary" />
+                  </Button>
+                  
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-destructive/10">
+                        <X className="h-4 w-4 text-destructive" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={() => onRemove(id)}>
+                        Remove Widget
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              </div>
+            </CardHeader>
+            
+            <CardContent className={cn("p-4 transition-all widget-content", 
+              isCollapsed ? "h-0 p-0 overflow-hidden" : ""
+            )}>
+              {children}
+              
+              {/* AI Description Box - only show if not small widget */}
+              {showAIDescription && !isSmallWidget && (
+                <div className="mt-4 p-3 bg-primary/5 rounded-lg border border-primary/20">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Bot className="h-4 w-4 text-primary" />
+                    <span className="text-sm font-medium text-primary">AI Insights</span>
+                  </div>
+                  <div className="text-sm text-muted-foreground min-h-[60px]">
+                    {aiDescription}
+                    {isGenerating && (
+                      <span className="inline-block w-2 h-4 bg-primary ml-1 animate-pulse" />
+                    )}
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Back side - Settings/Configuration view */}
+          <Card className="absolute inset-0 h-full shadow-md backface-hidden rotate-y-180 bg-card border-primary/20">
+            <CardHeader className="p-3 pb-2">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-md font-medium text-primary">Configure Widget</CardTitle>
                 <Button 
                   variant="ghost"
                   size="icon"
                   className="h-7 w-7 hover:bg-primary/10"
-                  onClick={handleSettingsClick}
+                  onClick={handleBackClick}
                 >
-                  <Settings className="h-4 w-4 text-primary" />
+                  <X className="h-4 w-4 text-primary" />
                 </Button>
-                
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-destructive/10">
-                      <X className="h-4 w-4 text-destructive" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => onRemove(id)}>
-                      Remove Widget
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
               </div>
-            </div>
-          </CardHeader>
-          
-          <CardContent className={cn("p-4 transition-all widget-content", 
-            isCollapsed ? "h-0 p-0 overflow-hidden" : ""
-          )}>
-            {children}
+            </CardHeader>
             
-            {/* AI Description Box */}
-            {showAIDescription && (
-              <div className="mt-4 p-3 bg-primary/5 rounded-lg border border-primary/20">
-                <div className="flex items-center gap-2 mb-2">
-                  <Bot className="h-4 w-4 text-primary" />
-                  <span className="text-sm font-medium text-primary">AI Insights</span>
-                </div>
-                <div className="text-sm text-muted-foreground min-h-[60px]">
-                  {aiDescription}
-                  {isGenerating && (
-                    <span className="inline-block w-2 h-4 bg-primary ml-1 animate-pulse" />
-                  )}
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Back side - Settings/Configuration view */}
-        <Card className="absolute inset-0 h-full shadow-md backface-hidden rotate-y-180 bg-card border-primary/20">
-          <CardHeader className="p-3 pb-2">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-md font-medium text-primary">Configure Widget</CardTitle>
-              <Button 
-                variant="ghost"
-                size="icon"
-                className="h-7 w-7 hover:bg-primary/10"
-                onClick={handleBackClick}
-              >
-                <X className="h-4 w-4 text-primary" />
-              </Button>
-            </div>
-          </CardHeader>
-          
-          <CardContent className="p-4 h-full overflow-hidden">
-            <WidgetConfigurationPanel 
-              widgetId={id}
-              widgetType={type}
-              widgetTitle={title}
-              onUpdateWidget={onUpdateWidget}
-              onClose={handleBackClick}
-            />
-          </CardContent>
-        </Card>
+            <CardContent className="p-4 h-full overflow-hidden">
+              <WidgetConfigurationPanel 
+                widgetId={id}
+                widgetType={type}
+                widgetTitle={title}
+                onUpdateWidget={onUpdateWidget}
+                onClose={handleBackClick}
+              />
+            </CardContent>
+          </Card>
+        </div>
       </div>
-    </div>
+
+      {/* Floating AI Description Panel */}
+      <AIDescriptionPanel 
+        description={aiDescription}
+        isGenerating={isGenerating}
+        isVisible={showFloatingPanel}
+      />
+    </>
   );
 };
 
@@ -217,7 +273,7 @@ const WidgetConfigurationPanel: React.FC<WidgetConfigurationPanelProps> = ({
           onClick={() => setMode('ai')}
           className="flex-1"
         >
-          <Sparkles className="h-3 w-3 mr-1" />
+          <Bot className="h-3 w-3 mr-1" />
           AI
         </Button>
         <Button
@@ -226,7 +282,7 @@ const WidgetConfigurationPanel: React.FC<WidgetConfigurationPanelProps> = ({
           onClick={() => setMode('sql')}
           className="flex-1"
         >
-          <Database className="h-3 w-3 mr-1" />
+          <Settings className="h-3 w-3 mr-1" />
           SQL
         </Button>
       </div>

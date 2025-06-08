@@ -90,11 +90,11 @@
 
 /* React Grid Layout styling with proper pointer events */
 .react-grid-item {
-  pointer-events: none;
+  pointer-events: auto;
 }
 
 .widget-container {
-  pointer-events: none;
+  pointer-events: auto;
 }
 
 .widget-drag-handle {
@@ -126,5 +126,16 @@
 
 /* But prevent dragging on content areas */
 .react-grid-item .widget-content * {
+  pointer-events: auto;
+}
+
+/* AI Description Floating Panel */
+.ai-description-panel {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 400px;
+  z-index: 1000;
   pointer-events: auto;
 }

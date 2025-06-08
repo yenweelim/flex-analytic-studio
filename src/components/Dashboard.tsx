@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import WidgetGrid from './widgets/WidgetGrid';
 import { Button } from '@/components/ui/button';
 import { ChartLine, ChartBarBig, ChartColumnBig, ChartPie, Table2, Plus, MessageCircle } from 'lucide-react';
@@ -10,6 +10,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ChatPanel } from './chat/ChatPanel';
+import { DashboardSelector } from './dashboard/DashboardSelector';
+import { useDashboardManager } from '@/hooks/useDashboardManager';
+import { toast } from '@/components/ui/use-toast';
 
 interface DashboardProps {
   onSaveLayout?: () => void;
@@ -20,8 +23,17 @@ const Dashboard: React.FC<DashboardProps> = ({ onSaveLayout }) => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const widgetGridRef = React.useRef<any>(null);
   
+  const {
+    dashboards,
+    currentDashboard,
+    createDashboard,
+    renameDashboard,
+    deleteDashboard,
+    switchDashboard,
+    updateDashboard
+  } = useDashboardManager();
+  
   const handleAddWidget = (type: string) => {
-    // Trigger the add widget function on the WidgetGrid through ref
     if (widgetGridRef.current?.handleAddWidget) {
       widgetGridRef.current.handleAddWidget(type);
     }
@@ -32,6 +44,22 @@ const Dashboard: React.FC<DashboardProps> = ({ onSaveLayout }) => {
       widgetGridRef.current.handleShowAICreator();
     }
   };
+
+  const handleSaveLayout = () => {
+    if (currentDashboard && onSaveLayout) {
+      onSaveLayout();
+      toast({
+        title: "Layout saved",
+        description: `${currentDashboard.name} layout has been saved successfully.`,
+      });
+    }
+  };
+
+  const handleLayoutChange = (layouts: any) => {
+    if (currentDashboard) {
+      updateDashboard(currentDashboard.id, { layouts });
+    }
+  };
   
   return (
     <div className="flex h-screen bg-gradient-to-br from-primary/5 to-secondary/10">
@@ -39,7 +67,14 @@ const Dashboard: React.FC<DashboardProps> = ({ onSaveLayout }) => {
       <div className="flex-1 flex flex-col">
         {/* Top bar */}
         <header className="bg-card/80 backdrop-blur-sm border-b border-primary/20 h-14 flex items-center justify-between px-6 sticky top-0 z-10">
-          <h1 className="text-xl font-semibold text-primary">Analytics Dashboard</h1>
+          <DashboardSelector
+            dashboards={dashboards}
+            currentDashboard={currentDashboard}
+            onCreateDashboard={createDashboard}
+            onRenameDashboard={renameDashboard}
+            onDeleteDashboard={deleteDashboard}
+            onSwitchDashboard={switchDashboard}
+          />
           
           <div className="flex items-center gap-2">
             <DropdownMenu>
@@ -71,9 +106,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onSaveLayout }) => {
               size="sm" 
               variant="outline"
               className="border-primary/20 hover:bg-primary/10"
-              onClick={() => {
-                if (onSaveLayout) onSaveLayout();
-              }}
+              onClick={handleSaveLayout}
             >
               Save Layout
             </Button>
@@ -83,8 +116,9 @@ const Dashboard: React.FC<DashboardProps> = ({ onSaveLayout }) => {
         {/* Main dashboard content */}
         <main className="flex-1 overflow-auto p-6">
           <WidgetGrid 
-            key={widgetGridKey} 
+            key={`${widgetGridKey}-${currentDashboard?.id}`}
             onShowAICreator={handleShowAICreator}
+            onLayoutChange={handleLayoutChange}
             ref={widgetGridRef}
           />
         </main>

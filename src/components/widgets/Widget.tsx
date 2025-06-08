@@ -1,15 +1,12 @@
+
 import React, { useState, useRef, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ChevronDown, GripVertical, Settings, X, Wand2, Bot } from 'lucide-react';
-import { 
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
+import { X, Bot } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { AIDescriptionPanel } from './AIDescriptionPanel';
+import { WidgetHeader } from './WidgetHeader';
+import { WidgetConfigurationPanel } from './WidgetConfigurationPanel';
 
 export interface WidgetProps {
   id: string;
@@ -129,77 +126,14 @@ export const Widget: React.FC<WidgetProps> = ({
                   border: `1px solid var(--outline-1)` 
                 }}>
             <CardHeader className="p-3 pb-0">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="widget-drag-handle cursor-grab hover:cursor-grabbing">
-                    <GripVertical className="h-4 w-4" style={{ color: 'var(--font-secondary)' }} />
-                  </div>
-                  <CardTitle 
-                    className="text-md font-medium font-h1"
-                    style={{ 
-                      color: 'var(--font-primary)',
-                      fontFamily: 'var(--font-h1)',
-                      fontWeight: 'var(--font-h1-weight)',
-                      fontSize: 'var(--font-h1-size)'
-                    }}
-                  >
-                    {title}
-                  </CardTitle>
-                </div>
-                
-                <div className="flex items-center gap-1 widget-controls">
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    className="h-7 w-7 hover:bg-mina-bg"
-                    onClick={() => setIsCollapsed(!isCollapsed)}
-                    style={{ backgroundColor: 'transparent' }}
-                  >
-                    <ChevronDown className={cn("h-4 w-4 transition-transform", 
-                      isCollapsed ? "" : "transform rotate-180"
-                    )} style={{ color: 'var(--purple-primary)' }} />
-                  </Button>
-
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    className="h-7 w-7 hover:bg-mina-bg"
-                    onClick={handleMagicClick}
-                    title="Generate AI Description"
-                    style={{ backgroundColor: 'transparent' }}
-                  >
-                    <Wand2 className="h-4 w-4" style={{ color: 'var(--purple-primary)' }} />
-                  </Button>
-                  
-                  <Button 
-                    variant="ghost"
-                    size="icon"
-                    className="h-7 w-7 hover:bg-mina-bg"
-                    onClick={handleSettingsClick}
-                    style={{ backgroundColor: 'transparent' }}
-                  >
-                    <Settings className="h-4 w-4" style={{ color: 'var(--purple-primary)' }} />
-                  </Button>
-                  
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="h-7 w-7 hover:bg-mina-bg"
-                        style={{ backgroundColor: 'transparent' }}
-                      >
-                        <X className="h-4 w-4" style={{ color: 'var(--semantic-error)' }} />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" style={{ backgroundColor: 'var(--background-1)', border: `1px solid var(--outline-1)` }}>
-                      <DropdownMenuItem onClick={() => onRemove(id)} style={{ color: 'var(--semantic-error)' }}>
-                        Remove Widget
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-              </div>
+              <WidgetHeader
+                title={title}
+                isCollapsed={isCollapsed}
+                onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
+                onMagicClick={handleMagicClick}
+                onSettingsClick={handleSettingsClick}
+                onRemove={() => onRemove(id)}
+              />
             </CardHeader>
             
             <CardContent className={cn("p-4 transition-all widget-content", 
@@ -258,7 +192,7 @@ export const Widget: React.FC<WidgetProps> = ({
                 }}>
             <CardHeader className="p-3 pb-2">
               <div className="flex items-center justify-between">
-                <CardTitle 
+                <h3 
                   className="text-md font-medium font-h1"
                   style={{ 
                     color: 'var(--font-primary)',
@@ -268,7 +202,7 @@ export const Widget: React.FC<WidgetProps> = ({
                   }}
                 >
                   Configure Widget
-                </CardTitle>
+                </h3>
                 <Button 
                   variant="ghost"
                   size="icon"
@@ -301,116 +235,6 @@ export const Widget: React.FC<WidgetProps> = ({
         isVisible={showFloatingPanel}
       />
     </>
-  );
-};
-
-// Configuration panel component
-interface WidgetConfigurationPanelProps {
-  widgetId: string;
-  widgetType: string;
-  widgetTitle: string;
-  onUpdateWidget?: (id: string, config: any) => void;
-  onClose: () => void;
-}
-
-const WidgetConfigurationPanel: React.FC<WidgetConfigurationPanelProps> = ({
-  widgetId,
-  widgetType,
-  widgetTitle,
-  onUpdateWidget,
-  onClose
-}) => {
-  const [mode, setMode] = useState<'ai' | 'sql'>('ai');
-  const [userInput, setUserInput] = useState('');
-  const [sqlInput, setSqlInput] = useState('');
-  const [autoGenerateAI, setAutoGenerateAI] = useState(false);
-
-  return (
-    <div className="space-y-4 h-full flex flex-col">
-      {/* Mode selection */}
-      <div className="flex gap-2">
-        <Button
-          variant={mode === 'ai' ? 'default' : 'outline'}
-          size="sm"
-          onClick={() => setMode('ai')}
-          className="flex-1"
-        >
-          <Bot className="h-3 w-3 mr-1" />
-          AI
-        </Button>
-        <Button
-          variant={mode === 'sql' ? 'default' : 'outline'}
-          size="sm"
-          onClick={() => setMode('sql')}
-          className="flex-1"
-        >
-          <Settings className="h-3 w-3 mr-1" />
-          SQL
-        </Button>
-      </div>
-
-      {mode === 'ai' ? (
-        <div className="space-y-3 flex-1">
-          <div>
-            <label className="text-sm font-medium mb-1 block">
-              Describe what you want to visualize:
-            </label>
-            <textarea
-              value={userInput}
-              onChange={(e) => setUserInput(e.target.value)}
-              placeholder="e.g., Show monthly sales trends..."
-              className="w-full h-20 text-xs border rounded p-2 resize-none"
-            />
-          </div>
-          <Button size="sm" className="w-full">
-            Generate Chart
-          </Button>
-        </div>
-      ) : (
-        <div className="space-y-3 flex-1">
-          <div>
-            <label className="text-sm font-medium mb-1 block">
-              SQL Query:
-            </label>
-            <textarea
-              value={sqlInput}
-              onChange={(e) => setSqlInput(e.target.value)}
-              placeholder="SELECT month, revenue FROM sales..."
-              className="w-full h-20 text-xs font-mono border rounded p-2 resize-none"
-            />
-          </div>
-          <Button size="sm" className="w-full">
-            Execute Query
-          </Button>
-        </div>
-      )}
-
-      {/* Auto-generate AI description setting */}
-      <div className="pt-2 border-t">
-        <div className="flex items-center justify-between mb-3">
-          <label className="text-sm font-medium">Auto-generate AI insights</label>
-          <Button
-            variant={autoGenerateAI ? "default" : "outline"}
-            size="sm"
-            onClick={() => setAutoGenerateAI(!autoGenerateAI)}
-            className="h-6 text-xs"
-          >
-            {autoGenerateAI ? "ON" : "OFF"}
-          </Button>
-        </div>
-        <p className="text-xs text-muted-foreground mb-3">
-          Automatically generate AI descriptions when data refreshes
-        </p>
-        <Button 
-          variant="outline" 
-          size="sm" 
-          onClick={onClose}
-          className="w-full"
-        >
-          Cancel
-        </Button>
-      </div>
-    </div>
   );
 };
 

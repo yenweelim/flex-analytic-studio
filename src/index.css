@@ -1,63 +1,152 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 248 250 252;
-    --foreground: 30 41 59;
+    /* System Colors */
+    --background: 255 255 255;
+    --foreground: 38 38 38;
     --card: 255 255 255;
-    --card-foreground: 30 41 59;
+    --card-foreground: 38 38 38;
     --popover: 255 255 255;
-    --popover-foreground: 30 41 59;
-    --primary: 139 92 246;
-    --primary-foreground: 255 255 255;
-    --secondary: 226 232 240;
-    --secondary-foreground: 30 41 59;
-    --muted: 241 245 249;
-    --muted-foreground: 100 116 139;
-    --accent: 236 240 251;
-    --accent-foreground: 30 41 59;
-    --destructive: 239 68 68;
-    --destructive-foreground: 255 255 255;
-    --border: 226 232 240;
-    --input: 226 232 240;
-    --ring: 139 92 246;
-    --chart-1: 139 92 246;
-    --chart-2: 168 85 247;
-    --chart-3: 124 58 237;
-    --chart-4: 147 51 234;
-    --chart-5: 126 34 206;
+    --popover-foreground: 38 38 38;
+    --primary: 167 118 208;
+    --primary-foreground: 251 251 251;
+    --secondary: 246 248 250;
+    --secondary-foreground: 38 38 38;
+    --muted: 247 246 249;
+    --muted-foreground: 107 114 125;
+    --accent: 246 248 250;
+    --accent-foreground: 38 38 38;
+    --destructive: 255 86 49;
+    --destructive-foreground: 251 251 251;
+    --border: 233 233 233;
+    --input: 233 233 233;
+    --ring: 167 118 208;
+    --chart-1: 150 45 255;
+    --chart-2: 200 147 253;
+    --chart-3: 240 229 252;
+    --chart-4: 74 58 255;
+    --chart-5: 147 170 253;
     --radius: 0.5rem;
+
+    /* Custom Design System Colors */
+    --background-1: #FFFFFF;
+    --background-2: #F6F8FA;
+    --mina-background: #F7F6F9;
+    --table-column-1: #FFFFFF;
+    --table-column-2: #F9FAFC;
+    --outline-1: #E9E9E9;
+    --outline-2: #F1F1F1;
+    --outline-3: #C1C7D0;
+   
+    /* Font Colors */
+    --font-primary: #262626;
+    --font-secondary: #6B727D;
+    --font-tertiary: #B3B3B3;
+    --font-alternate: #FBFBFB;
+   
+    /* Sidebar Colors */
+    --sidebar-background-gradient: linear-gradient(#352BA8, #B46ECE);
+    --sidebar-tab-title-font: #8B77D1;
+    --sidebar-selected-font: #F7E0FF;
+    --sidebar-unselect-font: #A187EA;
+    --sidebar-outline: #E9E9E9;
+    --sidebar-profile-name-font: #FBFBFB;
+    --sidebar-email-font: #C0DBFB;
+   
+    /* Branding Color Shades */
+    --purple-primary: #A776D0;
+    --purple-secondary: #8B77D1;
+    --purple-tertiary: #D177AF;
+    --blue-primary: #1BA6E9;
+    --blue-secondary: #1C63E8;
+    --blue-tertiary: #1CE8A7;
+   
+    /* Semantic Colors */
+    --semantic-info: #0165FF;
+    --semantic-confirm: #35B37E;
+    --semantic-warning: #FFAB00;
+    --semantic-error: #FF5631;
+    --semantic-focus: #6554C0;
+    --semantic-neutral: #FBFBFB;
+   
+    /* Graph Color Shades */
+    --graph-purple-1: #962DFF;
+    --graph-purple-2: #C893FD;
+    --graph-purple-3: #F0E5FC;
+    --graph-blue-1: #4A3AFF;
+    --graph-blue-2: #E5EAFC;
+    --graph-blue-3: #93AAFD;
+    --graph-purple-gradient: linear-gradient(to top, #765DFF 100%, #CFCAFF 53%, #FFFFFF 0%);
+    --graph-blue-gradient: linear-gradient(to top, #93AAFD 100%, #C6D2FD 53%, #E5EAFC 0%);
+    --graph-grey: #F8F8FF;
+   
+    /* AI Bubble Chat Colors */
+    --bubblechat-from-us: linear-gradient(#352BA8, #B46ECE);
+    --bubblechat-from-mina: #F7F6F9;
+
+    /* Typography - Display */
+    --font-display-1: "Poppins", sans-serif;
+    --font-display-1-weight: 500;
+    --font-display-1-size: 72px;
+   
+    --font-display-2: "Poppins", sans-serif;
+    --font-display-2-weight: 400;
+    --font-display-2-size: 20px;
+   
+    /* Typography - Headings */
+    --font-h1: "Poppins", sans-serif;
+    --font-h1-weight: 500;
+    --font-h1-size: 16px;
+   
+    --font-h2: "Poppins", sans-serif;
+    --font-h2-weight: 500;
+    --font-h2-size: 12px;
+   
+    --font-h3: "Poppins", sans-serif;
+    --font-h3-weight: 500;
+    --font-h3-size: 10px;
+   
+    /* Typography - Body */
+    --font-body-1: "Inter", sans-serif;
+    --font-body-1-weight: 400;
+    --font-body-1-size: 12px;
+   
+    --font-body-2: "Inter", sans-serif;
+    --font-body-2-weight: 400;
+    --font-body-2-size: 10px;
   }
 
   .dark {
     --background: 15 23 42;
-    --foreground: 248 250 252;
+    --foreground: 251 251 251;
     --card: 30 41 59;
-    --card-foreground: 248 250 252;
+    --card-foreground: 251 251 251;
     --popover: 30 41 59;
-    --popover-foreground: 248 250 252;
-    --primary: 139 92 246;
-    --primary-foreground: 255 255 255;
+    --popover-foreground: 251 251 251;
+    --primary: 167 118 208;
+    --primary-foreground: 251 251 251;
     --secondary: 51 65 85;
-    --secondary-foreground: 248 250 252;
+    --secondary-foreground: 251 251 251;
     --muted: 51 65 85;
     --muted-foreground: 148 163 184;
     --accent: 51 65 85;
-    --accent-foreground: 248 250 252;
-    --destructive: 239 68 68;
-    --destructive-foreground: 255 255 255;
+    --accent-foreground: 251 251 251;
+    --destructive: 255 86 49;
+    --destructive-foreground: 251 251 251;
     --border: 51 65 85;
     --input: 51 65 85;
-    --ring: 139 92 246;
-    --chart-1: 139 92 246;
-    --chart-2: 168 85 247;
-    --chart-3: 124 58 237;
-    --chart-4: 147 51 234;
-    --chart-5: 126 34 206;
+    --ring: 167 118 208;
+    --chart-1: 150 45 255;
+    --chart-2: 200 147 253;
+    --chart-3: 240 229 252;
+    --chart-4: 74 58 255;
+    --chart-5: 147 170 253;
   }
 }
 
@@ -67,7 +156,32 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: "Inter", sans-serif;
+    font-family: var(--font-body-1);
+    font-weight: var(--font-body-1-weight);
+    font-size: var(--font-body-1-size);
+    background-color: var(--background-2);
+    color: var(--font-primary);
+  }
+  
+  h1 {
+    font-family: var(--font-h1);
+    font-weight: var(--font-h1-weight);
+    font-size: var(--font-h1-size);
+    color: var(--font-primary);
+  }
+  
+  h2 {
+    font-family: var(--font-h2);
+    font-weight: var(--font-h2-weight);
+    font-size: var(--font-h2-size);
+    color: var(--font-primary);
+  }
+  
+  h3 {
+    font-family: var(--font-h3);
+    font-weight: var(--font-h3-weight);
+    font-size: var(--font-h3-size);
+    color: var(--font-primary);
   }
 }
 
@@ -138,4 +252,26 @@
   max-width: 400px;
   z-index: 1000;
   pointer-events: auto;
+}
+
+/* Custom gradient backgrounds */
+.sidebar-gradient {
+  background: var(--sidebar-background-gradient);
+}
+
+.chat-gradient {
+  background: var(--bubblechat-from-us);
+}
+
+.mina-background {
+  background-color: var(--mina-background);
+}
+
+/* Chart custom styles */
+.chart-purple-gradient {
+  background: var(--graph-purple-gradient);
+}
+
+.chart-blue-gradient {
+  background: var(--graph-blue-gradient);
 }

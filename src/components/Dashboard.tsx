@@ -62,11 +62,16 @@ const Dashboard: React.FC<DashboardProps> = ({ onSaveLayout }) => {
   };
   
   return (
-    <div className="flex h-screen bg-gradient-to-br from-primary/5 to-secondary/10">
+    <div className="flex h-screen" style={{ backgroundColor: 'var(--background-2)' }}>
       {/* Main content - full width */}
       <div className="flex-1 flex flex-col">
         {/* Top bar */}
-        <header className="bg-card/80 backdrop-blur-sm border-b border-primary/20 h-14 flex items-center justify-between px-6 sticky top-0 z-10">
+        <header className="h-14 flex items-center justify-between px-6 sticky top-0 z-10" 
+                style={{ 
+                  backgroundColor: 'var(--background-1)', 
+                  borderBottom: `1px solid var(--outline-1)`,
+                  backdropFilter: 'blur(8px)'
+                }}>
           <DashboardSelector
             dashboards={dashboards}
             currentDashboard={currentDashboard}
@@ -79,25 +84,35 @@ const Dashboard: React.FC<DashboardProps> = ({ onSaveLayout }) => {
           <div className="flex items-center gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button size="sm" className="flex items-center gap-1 bg-primary hover:bg-primary/90">
+                <Button 
+                  size="sm" 
+                  className="flex items-center gap-1 font-h2"
+                  style={{ 
+                    backgroundColor: 'var(--purple-primary)', 
+                    color: 'var(--font-alternate)',
+                    fontFamily: 'var(--font-h2)',
+                    fontWeight: 'var(--font-h2-weight)',
+                    fontSize: 'var(--font-h2-size)'
+                  }}
+                >
                   <Plus className="h-4 w-4" /> Add Widget
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={handleShowAICreator}>
-                  <ChartLine className="h-4 w-4 mr-2" /> AI-Powered Widget
+              <DropdownMenuContent align="end" style={{ backgroundColor: 'var(--background-1)', border: `1px solid var(--outline-1)` }}>
+                <DropdownMenuItem onClick={handleShowAICreator} style={{ color: 'var(--font-primary)' }}>
+                  <ChartLine className="h-4 w-4 mr-2" style={{ color: 'var(--purple-primary)' }} /> AI-Powered Widget
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleAddWidget('line')}>
-                  <ChartLine className="h-4 w-4 mr-2" /> Line Chart
+                <DropdownMenuItem onClick={() => handleAddWidget('line')} style={{ color: 'var(--font-primary)' }}>
+                  <ChartLine className="h-4 w-4 mr-2" style={{ color: 'var(--purple-primary)' }} /> Line Chart
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleAddWidget('bar')}>
-                  <ChartBarBig className="h-4 w-4 mr-2" /> Bar Chart
+                <DropdownMenuItem onClick={() => handleAddWidget('bar')} style={{ color: 'var(--font-primary)' }}>
+                  <ChartBarBig className="h-4 w-4 mr-2" style={{ color: 'var(--purple-primary)' }} /> Bar Chart
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleAddWidget('pie')}>
-                  <ChartPie className="h-4 w-4 mr-2" /> Pie Chart
+                <DropdownMenuItem onClick={() => handleAddWidget('pie')} style={{ color: 'var(--font-primary)' }}>
+                  <ChartPie className="h-4 w-4 mr-2" style={{ color: 'var(--purple-primary)' }} /> Pie Chart
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleAddWidget('table')}>
-                  <Table2 className="h-4 w-4 mr-2" /> Data Table
+                <DropdownMenuItem onClick={() => handleAddWidget('table')} style={{ color: 'var(--font-primary)' }}>
+                  <Table2 className="h-4 w-4 mr-2" style={{ color: 'var(--purple-primary)' }} /> Data Table
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -105,8 +120,16 @@ const Dashboard: React.FC<DashboardProps> = ({ onSaveLayout }) => {
             <Button 
               size="sm" 
               variant="outline"
-              className="border-primary/20 hover:bg-primary/10"
+              className="font-h2"
               onClick={handleSaveLayout}
+              style={{
+                borderColor: 'var(--outline-1)',
+                backgroundColor: 'var(--background-1)',
+                color: 'var(--font-primary)',
+                fontFamily: 'var(--font-h2)',
+                fontWeight: 'var(--font-h2-weight)',
+                fontSize: 'var(--font-h2-size)'
+              }}
             >
               Save Layout
             </Button>
@@ -126,8 +149,12 @@ const Dashboard: React.FC<DashboardProps> = ({ onSaveLayout }) => {
 
       {/* Floating Chat Button */}
       <Button
-        className="fixed bottom-6 right-6 h-12 w-12 rounded-full shadow-lg bg-primary hover:bg-primary/90 z-50"
+        className="fixed bottom-6 right-6 h-12 w-12 rounded-full shadow-lg z-50 chat-gradient"
         onClick={() => setIsChatOpen(true)}
+        style={{
+          background: 'var(--bubblechat-from-us)',
+          color: 'var(--font-alternate)'
+        }}
       >
         <MessageCircle className="h-5 w-5" />
       </Button>

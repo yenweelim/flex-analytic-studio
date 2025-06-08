@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -123,55 +124,89 @@ export const Widget: React.FC<WidgetProps> = ({
           isFlipped ? "rotate-y-180" : ""
         )}>
           {/* Front side - Normal widget view */}
-          <Card className={cn("absolute inset-0 h-full shadow-md backface-hidden bg-card border-primary/20", className)}>
+          <Card className={cn("absolute inset-0 h-full shadow-md backface-hidden", className)}
+                style={{ 
+                  backgroundColor: 'var(--background-1)', 
+                  border: `1px solid var(--outline-1)` 
+                }}>
             <CardHeader className="p-3 pb-0">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className="widget-drag-handle cursor-grab hover:cursor-grabbing">
-                    <GripVertical className="h-4 w-4 text-muted-foreground" />
+                    <GripVertical className="h-4 w-4" style={{ color: 'var(--font-secondary)' }} />
                   </div>
-                  <CardTitle className="text-md font-medium text-primary">{title}</CardTitle>
+                  <CardTitle 
+                    className="text-md font-medium font-h1"
+                    style={{ 
+                      color: 'var(--font-primary)',
+                      fontFamily: 'var(--font-h1)',
+                      fontWeight: 'var(--font-h1-weight)',
+                      fontSize: 'var(--font-h1-size)'
+                    }}
+                  >
+                    {title}
+                  </CardTitle>
                 </div>
                 
                 <div className="flex items-center gap-1 widget-controls">
                   <Button 
                     variant="ghost" 
                     size="icon" 
-                    className="h-7 w-7 hover:bg-primary/10"
+                    className="h-7 w-7"
                     onClick={() => setIsCollapsed(!isCollapsed)}
+                    style={{ 
+                      backgroundColor: 'transparent',
+                      ':hover': { backgroundColor: 'var(--mina-background)' }
+                    }}
                   >
-                    <ChevronDown className={cn("h-4 w-4 transition-transform text-primary", 
+                    <ChevronDown className={cn("h-4 w-4 transition-transform", 
                       isCollapsed ? "" : "transform rotate-180"
-                    )} />
+                    )} style={{ color: 'var(--purple-primary)' }} />
                   </Button>
 
                   <Button 
                     variant="ghost" 
                     size="icon" 
-                    className="h-7 w-7 hover:bg-primary/10"
+                    className="h-7 w-7"
                     onClick={handleMagicClick}
                     title="Generate AI Description"
+                    style={{ 
+                      backgroundColor: 'transparent',
+                      ':hover': { backgroundColor: 'var(--mina-background)' }
+                    }}
                   >
-                    <Wand2 className="h-4 w-4 text-primary" />
+                    <Wand2 className="h-4 w-4" style={{ color: 'var(--purple-primary)' }} />
                   </Button>
                   
                   <Button 
                     variant="ghost"
                     size="icon"
-                    className="h-7 w-7 hover:bg-primary/10"
+                    className="h-7 w-7"
                     onClick={handleSettingsClick}
+                    style={{ 
+                      backgroundColor: 'transparent',
+                      ':hover': { backgroundColor: 'var(--mina-background)' }
+                    }}
                   >
-                    <Settings className="h-4 w-4 text-primary" />
+                    <Settings className="h-4 w-4" style={{ color: 'var(--purple-primary)' }} />
                   </Button>
                   
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-destructive/10">
-                        <X className="h-4 w-4 text-destructive" />
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="h-7 w-7"
+                        style={{ 
+                          backgroundColor: 'transparent',
+                          ':hover': { backgroundColor: 'var(--mina-background)' }
+                        }}
+                      >
+                        <X className="h-4 w-4" style={{ color: 'var(--semantic-error)' }} />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => onRemove(id)}>
+                    <DropdownMenuContent align="end" style={{ backgroundColor: 'var(--background-1)', border: `1px solid var(--outline-1)` }}>
+                      <DropdownMenuItem onClick={() => onRemove(id)} style={{ color: 'var(--semantic-error)' }}>
                         Remove Widget
                       </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -187,15 +222,40 @@ export const Widget: React.FC<WidgetProps> = ({
               
               {/* AI Description Box - only show if not small widget */}
               {showAIDescription && !isSmallWidget && (
-                <div className="mt-4 p-3 bg-primary/5 rounded-lg border border-primary/20">
+                <div className="mt-4 p-3 rounded-lg" 
+                     style={{ 
+                       backgroundColor: 'var(--mina-background)', 
+                       border: `1px solid var(--outline-2)` 
+                     }}>
                   <div className="flex items-center gap-2 mb-2">
-                    <Bot className="h-4 w-4 text-primary" />
-                    <span className="text-sm font-medium text-primary">AI Insights</span>
+                    <Bot className="h-4 w-4" style={{ color: 'var(--purple-primary)' }} />
+                    <span 
+                      className="text-sm font-medium font-h2"
+                      style={{ 
+                        color: 'var(--purple-primary)',
+                        fontFamily: 'var(--font-h2)',
+                        fontWeight: 'var(--font-h2-weight)',
+                        fontSize: 'var(--font-h2-size)'
+                      }}
+                    >
+                      AI Insights
+                    </span>
                   </div>
-                  <div className="text-sm text-muted-foreground min-h-[60px]">
+                  <div 
+                    className="text-sm min-h-[60px] font-body-1"
+                    style={{ 
+                      color: 'var(--font-secondary)',
+                      fontFamily: 'var(--font-body-1)',
+                      fontWeight: 'var(--font-body-1-weight)',
+                      fontSize: 'var(--font-body-1-size)'
+                    }}
+                  >
                     {aiDescription}
                     {isGenerating && (
-                      <span className="inline-block w-2 h-4 bg-primary ml-1 animate-pulse" />
+                      <span 
+                        className="inline-block w-2 h-4 ml-1 animate-pulse"
+                        style={{ backgroundColor: 'var(--purple-primary)' }}
+                      />
                     )}
                   </div>
                 </div>
@@ -204,17 +264,35 @@ export const Widget: React.FC<WidgetProps> = ({
           </Card>
 
           {/* Back side - Settings/Configuration view */}
-          <Card className="absolute inset-0 h-full shadow-md backface-hidden rotate-y-180 bg-card border-primary/20">
+          <Card className="absolute inset-0 h-full shadow-md backface-hidden rotate-y-180"
+                style={{ 
+                  backgroundColor: 'var(--background-1)', 
+                  border: `1px solid var(--outline-1)` 
+                }}>
             <CardHeader className="p-3 pb-2">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-md font-medium text-primary">Configure Widget</CardTitle>
+                <CardTitle 
+                  className="text-md font-medium font-h1"
+                  style={{ 
+                    color: 'var(--font-primary)',
+                    fontFamily: 'var(--font-h1)',
+                    fontWeight: 'var(--font-h1-weight)',
+                    fontSize: 'var(--font-h1-size)'
+                  }}
+                >
+                  Configure Widget
+                </CardTitle>
                 <Button 
                   variant="ghost"
                   size="icon"
-                  className="h-7 w-7 hover:bg-primary/10"
+                  className="h-7 w-7"
                   onClick={handleBackClick}
+                  style={{ 
+                    backgroundColor: 'transparent',
+                    ':hover': { backgroundColor: 'var(--mina-background)' }
+                  }}
                 >
-                  <X className="h-4 w-4 text-primary" />
+                  <X className="h-4 w-4" style={{ color: 'var(--purple-primary)' }} />
                 </Button>
               </div>
             </CardHeader>

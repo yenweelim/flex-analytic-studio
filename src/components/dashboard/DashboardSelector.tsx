@@ -69,17 +69,34 @@ export const DashboardSelector: React.FC<DashboardSelectorProps> = ({
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="flex items-center gap-2 text-xl font-semibold text-primary">
+          <Button 
+            variant="ghost" 
+            className="flex items-center gap-2 text-xl font-semibold hover:bg-mina-bg"
+            style={{ 
+              color: '#262626',
+              fontFamily: 'var(--font-h1)',
+              fontWeight: 'var(--font-h1-weight)',
+              fontSize: 'var(--font-h1-size)'
+            }}
+          >
             {currentDashboard?.name || 'Select Dashboard'}
-            <ChevronDown className="h-4 w-4" />
+            <ChevronDown className="h-4 w-4" style={{ color: 'var(--purple-primary)' }} />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="start" className="w-64">
+        <DropdownMenuContent 
+          align="start" 
+          className="w-64"
+          style={{ 
+            backgroundColor: 'var(--background-1)', 
+            border: `1px solid var(--outline-1)` 
+          }}
+        >
           {dashboards.map(dashboard => (
             <DropdownMenuItem 
               key={dashboard.id}
               onClick={() => onSwitchDashboard(dashboard.id)}
-              className="flex items-center justify-between"
+              className="flex items-center justify-between hover:bg-mina-bg"
+              style={{ color: 'var(--font-primary)' }}
             >
               <span className={dashboard.id === currentDashboard?.id ? 'font-medium' : ''}>
                 {dashboard.name}
@@ -88,33 +105,37 @@ export const DashboardSelector: React.FC<DashboardSelectorProps> = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-6 w-6"
+                  className="h-6 w-6 hover:bg-mina-bg"
                   onClick={(e) => {
                     e.stopPropagation();
                     startRename(dashboard);
                   }}
                 >
-                  <Edit2 className="h-3 w-3" />
+                  <Edit2 className="h-3 w-3" style={{ color: 'var(--purple-primary)' }} />
                 </Button>
                 {dashboards.length > 1 && (
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-6 w-6 text-destructive hover:text-destructive"
+                    className="h-6 w-6 hover:bg-mina-bg"
                     onClick={(e) => {
                       e.stopPropagation();
                       onDeleteDashboard(dashboard.id);
                     }}
                   >
-                    <Trash2 className="h-3 w-3" />
+                    <Trash2 className="h-3 w-3" style={{ color: 'var(--semantic-error)' }} />
                   </Button>
                 )}
               </div>
             </DropdownMenuItem>
           ))}
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => setIsCreating(true)}>
-            <Plus className="h-4 w-4 mr-2" />
+          <DropdownMenuSeparator style={{ backgroundColor: 'var(--outline-1)' }} />
+          <DropdownMenuItem 
+            onClick={() => setIsCreating(true)}
+            className="hover:bg-mina-bg"
+            style={{ color: 'var(--font-primary)' }}
+          >
+            <Plus className="h-4 w-4 mr-2" style={{ color: 'var(--purple-primary)' }} />
             New Dashboard
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -122,9 +143,18 @@ export const DashboardSelector: React.FC<DashboardSelectorProps> = ({
 
       {/* Create Dashboard Dialog */}
       <Dialog open={isCreating} onOpenChange={setIsCreating}>
-        <DialogContent>
+        <DialogContent style={{ backgroundColor: 'var(--background-1)', border: `1px solid var(--outline-1)` }}>
           <DialogHeader>
-            <DialogTitle>Create New Dashboard</DialogTitle>
+            <DialogTitle 
+              style={{ 
+                color: 'var(--font-primary)',
+                fontFamily: 'var(--font-h1)',
+                fontWeight: 'var(--font-h1-weight)',
+                fontSize: 'var(--font-h1-size)'
+              }}
+            >
+              Create New Dashboard
+            </DialogTitle>
           </DialogHeader>
           <div className="py-4">
             <Input
@@ -132,13 +162,33 @@ export const DashboardSelector: React.FC<DashboardSelectorProps> = ({
               value={newDashboardName}
               onChange={(e) => setNewDashboardName(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleCreateDashboard()}
+              style={{ 
+                backgroundColor: 'var(--background-1)',
+                borderColor: 'var(--outline-1)',
+                color: 'var(--font-primary)'
+              }}
             />
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsCreating(false)}>
+            <Button 
+              variant="outline" 
+              onClick={() => setIsCreating(false)}
+              style={{
+                borderColor: 'var(--outline-1)',
+                backgroundColor: 'var(--background-1)',
+                color: 'var(--font-primary)'
+              }}
+            >
               Cancel
             </Button>
-            <Button onClick={handleCreateDashboard} disabled={!newDashboardName.trim()}>
+            <Button 
+              onClick={handleCreateDashboard} 
+              disabled={!newDashboardName.trim()}
+              style={{ 
+                backgroundColor: 'var(--purple-primary)', 
+                color: 'var(--font-alternate)'
+              }}
+            >
               Create
             </Button>
           </DialogFooter>
@@ -147,9 +197,18 @@ export const DashboardSelector: React.FC<DashboardSelectorProps> = ({
 
       {/* Rename Dashboard Dialog */}
       <Dialog open={isRenaming} onOpenChange={setIsRenaming}>
-        <DialogContent>
+        <DialogContent style={{ backgroundColor: 'var(--background-1)', border: `1px solid var(--outline-1)` }}>
           <DialogHeader>
-            <DialogTitle>Rename Dashboard</DialogTitle>
+            <DialogTitle
+              style={{ 
+                color: 'var(--font-primary)',
+                fontFamily: 'var(--font-h1)',
+                fontWeight: 'var(--font-h1-weight)',
+                fontSize: 'var(--font-h1-size)'
+              }}
+            >
+              Rename Dashboard
+            </DialogTitle>
           </DialogHeader>
           <div className="py-4">
             <Input
@@ -157,13 +216,33 @@ export const DashboardSelector: React.FC<DashboardSelectorProps> = ({
               value={newDashboardName}
               onChange={(e) => setNewDashboardName(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleRenameDashboard()}
+              style={{ 
+                backgroundColor: 'var(--background-1)',
+                borderColor: 'var(--outline-1)',
+                color: 'var(--font-primary)'
+              }}
             />
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsRenaming(false)}>
+            <Button 
+              variant="outline" 
+              onClick={() => setIsRenaming(false)}
+              style={{
+                borderColor: 'var(--outline-1)',
+                backgroundColor: 'var(--background-1)',
+                color: 'var(--font-primary)'
+              }}
+            >
               Cancel
             </Button>
-            <Button onClick={handleRenameDashboard} disabled={!newDashboardName.trim()}>
+            <Button 
+              onClick={handleRenameDashboard} 
+              disabled={!newDashboardName.trim()}
+              style={{ 
+                backgroundColor: 'var(--purple-primary)', 
+                color: 'var(--font-alternate)'
+              }}
+            >
               Rename
             </Button>
           </DialogFooter>

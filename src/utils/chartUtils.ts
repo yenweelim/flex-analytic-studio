@@ -17,7 +17,7 @@ export const defaultChartConfigs: Record<string, ChartConfig> = {
     dataKey: 'revenue',
     title: 'Monthly Revenue',
     xAxisKey: 'month',
-    colors: ['#9b87f5', '#7E69AB'],
+    colors: ['var(--graph-purple-1)', 'var(--graph-purple-2)'],
   },
   profitRevenue: {
     type: 'bar',
@@ -25,21 +25,21 @@ export const defaultChartConfigs: Record<string, ChartConfig> = {
     secondaryDataKey: 'profit',
     title: 'Revenue vs Profit',
     xAxisKey: 'month',
-    colors: ['#9b87f5', '#4CAF50'],
+    colors: ['var(--graph-purple-1)', 'var(--graph-blue-1)'],
   },
   customers: {
     type: 'area',
     dataKey: 'customers',
     title: 'Monthly Customers',
     xAxisKey: 'month',
-    colors: ['#7E69AB'],
+    colors: ['var(--graph-purple-2)'],
   },
   categories: {
     type: 'pie',
     dataKey: 'value',
     title: 'Sales by Category',
     xAxisKey: 'name',
-    colors: ['#9b87f5', '#7E69AB', '#6E59A5', '#4CAF50'],
+    colors: ['var(--graph-purple-1)', 'var(--graph-purple-2)', 'var(--graph-blue-1)', 'var(--graph-blue-3)'],
   }
 };
 
@@ -66,16 +66,26 @@ export const getPercentageChange = (current: number, previous: number): number =
 };
 
 export const getRandomColor = (): string => {
-  const letters = '0123456789ABCDEF';
-  let color = '#';
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
+  const predefinedColors = [
+    'var(--graph-purple-1)',
+    'var(--graph-purple-2)',
+    'var(--graph-purple-3)',
+    'var(--graph-blue-1)',
+    'var(--graph-blue-2)',
+    'var(--graph-blue-3)'
+  ];
+  return predefinedColors[Math.floor(Math.random() * predefinedColors.length)];
 };
 
 export const generateChartColors = (count: number): string[] => {
-  const baseColors = ['#9b87f5', '#7E69AB', '#6E59A5', '#4CAF50', '#2196F3', '#FFC107', '#F44336'];
+  const baseColors = [
+    'var(--graph-purple-1)',
+    'var(--graph-purple-2)',
+    'var(--graph-blue-1)',
+    'var(--graph-blue-3)',
+    'var(--graph-purple-3)',
+    'var(--graph-blue-2)'
+  ];
   
   if (count <= baseColors.length) {
     return baseColors.slice(0, count);

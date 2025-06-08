@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { 
   ResponsiveContainer, 
@@ -58,17 +59,17 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
         return (
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={chartData} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--outline-2)" />
               <XAxis 
                 dataKey={chartConfig.xAxisKey} 
-                tick={{ fill: '#333333' }}
-                axisLine={{ stroke: '#e0e0e0' }}
-                tickLine={{ stroke: '#e0e0e0' }}
+                tick={{ fill: 'var(--font-primary)' }}
+                axisLine={{ stroke: 'var(--outline-1)' }}
+                tickLine={{ stroke: 'var(--outline-1)' }}
               />
               <YAxis 
-                tick={{ fill: '#333333' }}
-                axisLine={{ stroke: '#e0e0e0' }}
-                tickLine={{ stroke: '#e0e0e0' }}
+                tick={{ fill: 'var(--font-primary)' }}
+                axisLine={{ stroke: 'var(--outline-1)' }}
+                tickLine={{ stroke: 'var(--outline-1)' }}
                 tickFormatter={(value) => `$${value / 1000}k`}
               />
               <Tooltip formatter={(value) => [`$${value}`, chartConfig.dataKey]} />
@@ -99,17 +100,17 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
         return (
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={chartData} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--outline-2)" />
               <XAxis 
                 dataKey={chartConfig.xAxisKey}
-                tick={{ fill: '#333333' }}
-                axisLine={{ stroke: '#e0e0e0' }}
-                tickLine={{ stroke: '#e0e0e0' }}
+                tick={{ fill: 'var(--font-primary)' }}
+                axisLine={{ stroke: 'var(--outline-1)' }}
+                tickLine={{ stroke: 'var(--outline-1)' }}
               />
               <YAxis 
-                tick={{ fill: '#333333' }}
-                axisLine={{ stroke: '#e0e0e0' }}
-                tickLine={{ stroke: '#e0e0e0' }}
+                tick={{ fill: 'var(--font-primary)' }}
+                axisLine={{ stroke: 'var(--outline-1)' }}
+                tickLine={{ stroke: 'var(--outline-1)' }}
                 tickFormatter={(value) => `$${value / 1000}k`}
               />
               <Tooltip formatter={(value) => [`$${value}`, '']} />
@@ -163,17 +164,17 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
         return (
           <ResponsiveContainer width="100%" height={300}>
             <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--outline-2)" />
               <XAxis 
                 dataKey={chartConfig.xAxisKey}
-                tick={{ fill: '#333333' }}
-                axisLine={{ stroke: '#e0e0e0' }}
-                tickLine={{ stroke: '#e0e0e0' }}
+                tick={{ fill: 'var(--font-primary)' }}
+                axisLine={{ stroke: 'var(--outline-1)' }}
+                tickLine={{ stroke: 'var(--outline-1)' }}
               />
               <YAxis 
-                tick={{ fill: '#333333' }}
-                axisLine={{ stroke: '#e0e0e0' }}
-                tickLine={{ stroke: '#e0e0e0' }}
+                tick={{ fill: 'var(--font-primary)' }}
+                axisLine={{ stroke: 'var(--outline-1)' }}
+                tickLine={{ stroke: 'var(--outline-1)' }}
               />
               <Tooltip />
               <Legend />

@@ -53,7 +53,16 @@ export const TableWidget: React.FC<TableWidgetProps> = ({
           <TableHeader>
             <TableRow>
               {columns.map((column) => (
-                <TableHead key={column.key} className="font-semibold">
+                <TableHead 
+                  key={column.key} 
+                  className="font-semibold"
+                  style={{ 
+                    color: '#262626',
+                    fontFamily: 'var(--font-h2)',
+                    fontWeight: 'var(--font-h2-weight)',
+                    fontSize: 'var(--font-h2-size)'
+                  }}
+                >
                   {column.header}
                 </TableHead>
               ))}
@@ -63,7 +72,15 @@ export const TableWidget: React.FC<TableWidgetProps> = ({
             {productsData.map((product) => (
               <TableRow key={product.id}>
                 {columns.map((column) => (
-                  <TableCell key={`${product.id}-${column.key}`}>
+                  <TableCell 
+                    key={`${product.id}-${column.key}`}
+                    style={{ 
+                      color: 'var(--font-primary)',
+                      fontFamily: 'var(--font-body-1)',
+                      fontWeight: 'var(--font-body-1-weight)',
+                      fontSize: 'var(--font-body-1-size)'
+                    }}
+                  >
                     {column.format ? column.format(product[column.key as keyof typeof product]) : product[column.key as keyof typeof product]}
                   </TableCell>
                 ))}

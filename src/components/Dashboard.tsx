@@ -86,7 +86,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onSaveLayout }) => {
               <DropdownMenuTrigger asChild>
                 <Button 
                   size="sm" 
-                  className="flex items-center gap-1 font-h2"
+                  className="flex items-center gap-1 font-h2 hover:opacity-90"
                   style={{ 
                     backgroundColor: 'var(--purple-primary)', 
                     color: 'var(--font-alternate)',
@@ -98,21 +98,49 @@ const Dashboard: React.FC<DashboardProps> = ({ onSaveLayout }) => {
                   <Plus className="h-4 w-4" /> Add Widget
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" style={{ backgroundColor: 'var(--background-1)', border: `1px solid var(--outline-1)` }}>
-                <DropdownMenuItem onClick={handleShowAICreator} style={{ color: 'var(--font-primary)' }}>
-                  <ChartLine className="h-4 w-4 mr-2" style={{ color: 'var(--purple-primary)' }} /> AI-Powered Widget
+              <DropdownMenuContent 
+                align="end" 
+                style={{ backgroundColor: 'var(--background-1)', border: `1px solid var(--outline-1)` }}
+              >
+                <DropdownMenuItem 
+                  onClick={handleShowAICreator} 
+                  className="hover:bg-mina-bg"
+                  style={{ color: 'var(--font-primary)' }}
+                >
+                  <ChartLine className="h-4 w-4 mr-2" style={{ color: 'var(--purple-primary)' }} /> 
+                  AI-Powered Widget
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleAddWidget('line')} style={{ color: 'var(--font-primary)' }}>
-                  <ChartLine className="h-4 w-4 mr-2" style={{ color: 'var(--purple-primary)' }} /> Line Chart
+                <DropdownMenuItem 
+                  onClick={() => handleAddWidget('line')} 
+                  className="hover:bg-mina-bg"
+                  style={{ color: 'var(--font-primary)' }}
+                >
+                  <ChartLine className="h-4 w-4 mr-2" style={{ color: 'var(--purple-primary)' }} /> 
+                  Line Chart
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleAddWidget('bar')} style={{ color: 'var(--font-primary)' }}>
-                  <ChartBarBig className="h-4 w-4 mr-2" style={{ color: 'var(--purple-primary)' }} /> Bar Chart
+                <DropdownMenuItem 
+                  onClick={() => handleAddWidget('bar')} 
+                  className="hover:bg-mina-bg"
+                  style={{ color: 'var(--font-primary)' }}
+                >
+                  <ChartBarBig className="h-4 w-4 mr-2" style={{ color: 'var(--purple-primary)' }} /> 
+                  Bar Chart
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleAddWidget('pie')} style={{ color: 'var(--font-primary)' }}>
-                  <ChartPie className="h-4 w-4 mr-2" style={{ color: 'var(--purple-primary)' }} /> Pie Chart
+                <DropdownMenuItem 
+                  onClick={() => handleAddWidget('pie')} 
+                  className="hover:bg-mina-bg"
+                  style={{ color: 'var(--font-primary)' }}
+                >
+                  <ChartPie className="h-4 w-4 mr-2" style={{ color: 'var(--purple-primary)' }} /> 
+                  Pie Chart
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleAddWidget('table')} style={{ color: 'var(--font-primary)' }}>
-                  <Table2 className="h-4 w-4 mr-2" style={{ color: 'var(--purple-primary)' }} /> Data Table
+                <DropdownMenuItem 
+                  onClick={() => handleAddWidget('table')} 
+                  className="hover:bg-mina-bg"
+                  style={{ color: 'var(--font-primary)' }}
+                >
+                  <Table2 className="h-4 w-4 mr-2" style={{ color: 'var(--purple-primary)' }} /> 
+                  Data Table
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -120,7 +148,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onSaveLayout }) => {
             <Button 
               size="sm" 
               variant="outline"
-              className="font-h2"
+              className="font-h2 hover:bg-mina-bg"
               onClick={handleSaveLayout}
               style={{
                 borderColor: 'var(--outline-1)',

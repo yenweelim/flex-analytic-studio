@@ -1,23 +1,23 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import WidgetGrid from './widgets/WidgetGrid';
-import { Sidebar } from './sidebar/Sidebar';
 import { Button } from '@/components/ui/button';
-import { ChartLine, ChartBarBig, ChartColumnBig, ChartPie, Table2, Plus } from 'lucide-react';
+import { ChartLine, ChartBarBig, ChartColumnBig, ChartPie, Table2, Plus, MessageCircle } from 'lucide-react';
 import { 
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { ChatPanel } from './chat/ChatPanel';
 
 interface DashboardProps {
   onSaveLayout?: () => void;
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ onSaveLayout }) => {
-  const [sidebarContent, setSidebarContent] = React.useState<boolean>(true);
   const [widgetGridKey, setWidgetGridKey] = React.useState<number>(0);
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const widgetGridRef = React.useRef<any>(null);
   
   const handleAddWidget = (type: string) => {
@@ -34,20 +34,17 @@ const Dashboard: React.FC<DashboardProps> = ({ onSaveLayout }) => {
   };
   
   return (
-    <div className="flex h-screen bg-background">
-      {/* Sidebar */}
-      <Sidebar onAddWidget={handleAddWidget} />
-      
-      {/* Main content */}
-      <div className="flex-1 flex flex-col pl-64">
+    <div className="flex h-screen bg-gradient-to-br from-primary/5 to-secondary/10">
+      {/* Main content - full width */}
+      <div className="flex-1 flex flex-col">
         {/* Top bar */}
-        <header className="bg-white border-b h-14 flex items-center justify-between px-6 sticky top-0 z-10">
-          <h1 className="text-xl font-semibold">Analytics Dashboard</h1>
+        <header className="bg-card/80 backdrop-blur-sm border-b border-primary/20 h-14 flex items-center justify-between px-6 sticky top-0 z-10">
+          <h1 className="text-xl font-semibold text-primary">Analytics Dashboard</h1>
           
           <div className="flex items-center gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button size="sm" className="flex items-center gap-1">
+                <Button size="sm" className="flex items-center gap-1 bg-primary hover:bg-primary/90">
                   <Plus className="h-4 w-4" /> Add Widget
                 </Button>
               </DropdownMenuTrigger>
@@ -73,6 +70,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onSaveLayout }) => {
             <Button 
               size="sm" 
               variant="outline"
+              className="border-primary/20 hover:bg-primary/10"
               onClick={() => {
                 if (onSaveLayout) onSaveLayout();
               }}
@@ -91,6 +89,20 @@ const Dashboard: React.FC<DashboardProps> = ({ onSaveLayout }) => {
           />
         </main>
       </div>
+
+      {/* Floating Chat Button */}
+      <Button
+        className="fixed bottom-6 right-6 h-12 w-12 rounded-full shadow-lg bg-primary hover:bg-primary/90 z-50"
+        onClick={() => setIsChatOpen(true)}
+      >
+        <MessageCircle className="h-5 w-5" />
+      </Button>
+
+      {/* Chat Panel */}
+      <ChatPanel 
+        isOpen={isChatOpen}
+        onClose={() => setIsChatOpen(false)}
+      />
     </div>
   );
 };

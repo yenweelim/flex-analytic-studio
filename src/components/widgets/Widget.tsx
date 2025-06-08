@@ -75,24 +75,24 @@ export const Widget: React.FC<WidgetProps> = ({
         isFlipped ? "rotate-y-180" : ""
       )}>
         {/* Front side - Normal widget view */}
-        <Card className={cn("absolute inset-0 h-full shadow-md backface-hidden", className)}>
+        <Card className={cn("absolute inset-0 h-full shadow-md backface-hidden bg-card border-primary/20", className)}>
           <CardHeader className="p-3 pb-0">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="react-grid-draghandle">
-                  <GripVertical className="h-4 w-4 text-muted-foreground cursor-grab hover:cursor-grabbing" />
+                <div className="widget-drag-handle cursor-grab hover:cursor-grabbing">
+                  <GripVertical className="h-4 w-4 text-muted-foreground" />
                 </div>
-                <CardTitle className="text-md font-medium">{title}</CardTitle>
+                <CardTitle className="text-md font-medium text-primary">{title}</CardTitle>
               </div>
               
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1 widget-controls">
                 <Button 
                   variant="ghost" 
                   size="icon" 
-                  className="h-7 w-7"
+                  className="h-7 w-7 hover:bg-primary/10"
                   onClick={() => setIsCollapsed(!isCollapsed)}
                 >
-                  <ChevronDown className={cn("h-4 w-4 transition-transform", 
+                  <ChevronDown className={cn("h-4 w-4 transition-transform text-primary", 
                     isCollapsed ? "" : "transform rotate-180"
                   )} />
                 </Button>
@@ -100,26 +100,26 @@ export const Widget: React.FC<WidgetProps> = ({
                 <Button 
                   variant="ghost" 
                   size="icon" 
-                  className="h-7 w-7"
+                  className="h-7 w-7 hover:bg-primary/10"
                   onClick={handleMagicClick}
                   title="Generate AI Description"
                 >
-                  <Wand2 className="h-4 w-4" />
+                  <Wand2 className="h-4 w-4 text-primary" />
                 </Button>
                 
                 <Button 
                   variant="ghost"
                   size="icon"
-                  className="h-7 w-7"
+                  className="h-7 w-7 hover:bg-primary/10"
                   onClick={handleSettingsClick}
                 >
-                  <Settings className="h-4 w-4" />
+                  <Settings className="h-4 w-4 text-primary" />
                 </Button>
                 
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="h-7 w-7">
-                      <X className="h-4 w-4" />
+                    <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-destructive/10">
+                      <X className="h-4 w-4 text-destructive" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
@@ -132,17 +132,17 @@ export const Widget: React.FC<WidgetProps> = ({
             </div>
           </CardHeader>
           
-          <CardContent className={cn("p-4 transition-all", 
+          <CardContent className={cn("p-4 transition-all widget-content", 
             isCollapsed ? "h-0 p-0 overflow-hidden" : ""
           )}>
             {children}
             
             {/* AI Description Box */}
             {showAIDescription && (
-              <div className="mt-4 p-3 bg-muted rounded-lg border">
+              <div className="mt-4 p-3 bg-primary/5 rounded-lg border border-primary/20">
                 <div className="flex items-center gap-2 mb-2">
                   <Bot className="h-4 w-4 text-primary" />
-                  <span className="text-sm font-medium">AI Insights</span>
+                  <span className="text-sm font-medium text-primary">AI Insights</span>
                 </div>
                 <div className="text-sm text-muted-foreground min-h-[60px]">
                   {aiDescription}
@@ -156,17 +156,17 @@ export const Widget: React.FC<WidgetProps> = ({
         </Card>
 
         {/* Back side - Settings/Configuration view */}
-        <Card className="absolute inset-0 h-full shadow-md backface-hidden rotate-y-180">
+        <Card className="absolute inset-0 h-full shadow-md backface-hidden rotate-y-180 bg-card border-primary/20">
           <CardHeader className="p-3 pb-2">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-md font-medium">Configure Widget</CardTitle>
+              <CardTitle className="text-md font-medium text-primary">Configure Widget</CardTitle>
               <Button 
                 variant="ghost"
                 size="icon"
-                className="h-7 w-7"
+                className="h-7 w-7 hover:bg-primary/10"
                 onClick={handleBackClick}
               >
-                <X className="h-4 w-4" />
+                <X className="h-4 w-4 text-primary" />
               </Button>
             </div>
           </CardHeader>

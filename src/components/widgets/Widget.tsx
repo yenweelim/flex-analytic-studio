@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -152,12 +151,9 @@ export const Widget: React.FC<WidgetProps> = ({
                   <Button 
                     variant="ghost" 
                     size="icon" 
-                    className="h-7 w-7"
+                    className="h-7 w-7 hover:bg-mina-bg"
                     onClick={() => setIsCollapsed(!isCollapsed)}
-                    style={{ 
-                      backgroundColor: 'transparent',
-                      ':hover': { backgroundColor: 'var(--mina-background)' }
-                    }}
+                    style={{ backgroundColor: 'transparent' }}
                   >
                     <ChevronDown className={cn("h-4 w-4 transition-transform", 
                       isCollapsed ? "" : "transform rotate-180"
@@ -167,13 +163,10 @@ export const Widget: React.FC<WidgetProps> = ({
                   <Button 
                     variant="ghost" 
                     size="icon" 
-                    className="h-7 w-7"
+                    className="h-7 w-7 hover:bg-mina-bg"
                     onClick={handleMagicClick}
                     title="Generate AI Description"
-                    style={{ 
-                      backgroundColor: 'transparent',
-                      ':hover': { backgroundColor: 'var(--mina-background)' }
-                    }}
+                    style={{ backgroundColor: 'transparent' }}
                   >
                     <Wand2 className="h-4 w-4" style={{ color: 'var(--purple-primary)' }} />
                   </Button>
@@ -181,12 +174,9 @@ export const Widget: React.FC<WidgetProps> = ({
                   <Button 
                     variant="ghost"
                     size="icon"
-                    className="h-7 w-7"
+                    className="h-7 w-7 hover:bg-mina-bg"
                     onClick={handleSettingsClick}
-                    style={{ 
-                      backgroundColor: 'transparent',
-                      ':hover': { backgroundColor: 'var(--mina-background)' }
-                    }}
+                    style={{ backgroundColor: 'transparent' }}
                   >
                     <Settings className="h-4 w-4" style={{ color: 'var(--purple-primary)' }} />
                   </Button>
@@ -196,11 +186,8 @@ export const Widget: React.FC<WidgetProps> = ({
                       <Button 
                         variant="ghost" 
                         size="icon" 
-                        className="h-7 w-7"
-                        style={{ 
-                          backgroundColor: 'transparent',
-                          ':hover': { backgroundColor: 'var(--mina-background)' }
-                        }}
+                        className="h-7 w-7 hover:bg-mina-bg"
+                        style={{ backgroundColor: 'transparent' }}
                       >
                         <X className="h-4 w-4" style={{ color: 'var(--semantic-error)' }} />
                       </Button>
@@ -285,12 +272,9 @@ export const Widget: React.FC<WidgetProps> = ({
                 <Button 
                   variant="ghost"
                   size="icon"
-                  className="h-7 w-7"
+                  className="h-7 w-7 hover:bg-mina-bg"
                   onClick={handleBackClick}
-                  style={{ 
-                    backgroundColor: 'transparent',
-                    ':hover': { backgroundColor: 'var(--mina-background)' }
-                  }}
+                  style={{ backgroundColor: 'transparent' }}
                 >
                   <X className="h-4 w-4" style={{ color: 'var(--purple-primary)' }} />
                 </Button>

@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -103,15 +104,15 @@ export const Widget: React.FC<WidgetProps> = ({
 
   const handleMouseEnter = () => {
     setIsHovering(true);
-    // Show floating panel on hover only if there's content and widget is small
-    if (isSmallWidget && (aiDescription || isGenerating)) {
+    // Show floating panel on hover if there's content and widget is small
+    if (isSmallWidget && aiDescription && !isGenerating) {
       setShowFloatingPanel(true);
     }
   };
 
   const handleMouseLeave = () => {
     setIsHovering(false);
-    // Hide floating panel when not hovering, but keep it if still generating
+    // Hide floating panel when not hovering, unless generating
     if (isSmallWidget && !isGenerating) {
       setShowFloatingPanel(false);
     }
@@ -218,25 +219,30 @@ export const Widget: React.FC<WidgetProps> = ({
                 <Button 
                   variant="ghost"
                   size="icon"
-                  className="h-7 w-7 hover:bg-mina-bg"
+                  className="h-7 w-7"
                   onClick={handleBackClick}
-                  style={{ backgroundColor: 'transparent' }}
+                  style={{ 
+                    backgroundColor: 'transparent',
+                    color: 'var(--purple-primary)'
+                  }}
                 >
-                  <X className="h-4 w-4" style={{ color: 'var(--purple-primary)' }} />
+                  <X className="h-4 w-4" />
                 </Button>
               </div>
             </CardHeader>
             
-            <CardContent className="p-4 flex-1 overflow-auto">
-              <WidgetConfigurationPanel 
-                widgetId={id}
-                widgetType={type}
-                widgetTitle={title}
-                autoGenerateAI={autoGenerateAI}
-                onUpdateAutoGenerate={setAutoGenerateAI}
-                onUpdateWidget={onUpdateWidget}
-                onClose={handleBackClick}
-              />
+            <CardContent className="p-4 flex-1 min-h-0 overflow-hidden">
+              <div className="h-full overflow-y-auto">
+                <WidgetConfigurationPanel 
+                  widgetId={id}
+                  widgetType={type}
+                  widgetTitle={title}
+                  autoGenerateAI={autoGenerateAI}
+                  onUpdateAutoGenerate={setAutoGenerateAI}
+                  onUpdateWidget={onUpdateWidget}
+                  onClose={handleBackClick}
+                />
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -246,7 +252,7 @@ export const Widget: React.FC<WidgetProps> = ({
       <AIDescriptionPanel 
         description={aiDescription}
         isGenerating={isGenerating}
-        isVisible={showFloatingPanel && (isHovering || isGenerating)}
+        isVisible={showFloatingPanel}
       />
     </>
   );

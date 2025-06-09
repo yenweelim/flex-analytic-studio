@@ -37,6 +37,7 @@ export const Widget: React.FC<WidgetProps> = ({
   const [isHovering, setIsHovering] = useState(false);
   const [showFloatingPanel, setShowFloatingPanel] = useState(false);
   const [isSmallWidget, setIsSmallWidget] = useState(false);
+  const [autoGenerateAI, setAutoGenerateAI] = useState(true); // Default to true
   
   const widgetRef = useRef<HTMLDivElement>(null);
 
@@ -57,6 +58,13 @@ export const Widget: React.FC<WidgetProps> = ({
 
     return () => resizeObserver.disconnect();
   }, []);
+
+  // Auto-generate AI insights on mount/refresh when autoGenerateAI is enabled
+  useEffect(() => {
+    if (autoGenerateAI && !aiDescription) {
+      handleMagicClick();
+    }
+  }, [autoGenerateAI]);
 
   const handleSettingsClick = () => {
     setIsFlipped(true);
@@ -220,6 +228,8 @@ export const Widget: React.FC<WidgetProps> = ({
                 widgetId={id}
                 widgetType={type}
                 widgetTitle={title}
+                autoGenerateAI={autoGenerateAI}
+                onUpdateAutoGenerate={setAutoGenerateAI}
                 onUpdateWidget={onUpdateWidget}
                 onClose={handleBackClick}
               />

@@ -18,11 +18,18 @@ export const AIDescriptionPanel: React.FC<AIDescriptionPanelProps> = ({
 
   return (
     <Card 
-      className="ai-description-panel shadow-lg"
+      className="ai-description-panel shadow-xl"
       style={{ 
         backgroundColor: 'var(--background-1)',
         border: `1px solid var(--outline-2)`,
-        backdropFilter: 'blur(8px)'
+        backdropFilter: 'blur(8px)',
+        position: 'fixed',
+        bottom: '20px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        maxWidth: '400px',
+        zIndex: 9999,
+        pointerEvents: 'auto'
       }}
     >
       <CardContent className="p-3">
@@ -41,7 +48,7 @@ export const AIDescriptionPanel: React.FC<AIDescriptionPanelProps> = ({
           </span>
         </div>
         <div 
-          className="text-sm min-h-[40px] font-body-1"
+          className="text-sm min-h-[40px] font-body-1 max-h-[200px] overflow-y-auto"
           style={{ 
             color: 'var(--font-secondary)',
             fontFamily: 'var(--font-body-1)',

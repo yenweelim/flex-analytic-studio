@@ -70,7 +70,10 @@ export const TableWidget: React.FC<TableWidgetProps> = ({
           </TableHeader>
           <TableBody>
             {productsData.map((product) => (
-              <TableRow key={product.id}>
+              <TableRow 
+                key={product.id}
+                className="hover:bg-mina-bg transition-colors"
+              >
                 {columns.map((column) => (
                   <TableCell 
                     key={`${product.id}-${column.key}`}

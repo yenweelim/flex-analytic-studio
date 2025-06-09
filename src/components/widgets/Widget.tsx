@@ -123,8 +123,8 @@ export const Widget: React.FC<WidgetProps> = ({
         )}>
           {/* Front side - Normal widget view */}
           <Card className={cn(
-            "absolute inset-0 h-full shadow-md backface-hidden overflow-hidden transition-all duration-300",
-            isCollapsed ? "h-auto" : "",
+            "absolute inset-0 shadow-md backface-hidden overflow-hidden transition-all duration-300 flex flex-col",
+            isCollapsed ? "h-auto" : "h-full",
             className
           )}
                 style={{ 
@@ -194,7 +194,7 @@ export const Widget: React.FC<WidgetProps> = ({
                 <BulbIndicator
                   description={aiDescription}
                   isGenerating={isGenerating}
-                  isVisible={isSmallWidget && (aiDescription || isGenerating)}
+                  isVisible={Boolean(isSmallWidget && (aiDescription || isGenerating))}
                 />
               </CardContent>
             )}

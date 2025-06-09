@@ -17,7 +17,7 @@ export const BulbIndicator: React.FC<BulbIndicatorProps> = ({
 }) => {
   const [showFloating, setShowFloating] = useState(false);
 
-  if (!isVisible || (!description && !isGenerating)) return null;
+  if (!isVisible) return null;
 
   return (
     <>
@@ -29,7 +29,7 @@ export const BulbIndicator: React.FC<BulbIndicatorProps> = ({
         <Button
           variant="ghost"
           size="icon"
-          className="h-8 w-8 rounded-full shadow-md"
+          className="h-8 w-8 rounded-full shadow-md hover:opacity-80"
           style={{ 
             backgroundColor: 'var(--purple-primary)',
             color: 'var(--font-alternate)'
@@ -39,11 +39,13 @@ export const BulbIndicator: React.FC<BulbIndicatorProps> = ({
         </Button>
       </div>
 
-      <AIDescriptionPanel 
-        description={description}
-        isGenerating={isGenerating}
-        isVisible={showFloating}
-      />
+      {showFloating && (
+        <AIDescriptionPanel 
+          description={description}
+          isGenerating={isGenerating}
+          isVisible={showFloating}
+        />
+      )}
     </>
   );
 };

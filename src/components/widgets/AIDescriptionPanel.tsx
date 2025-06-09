@@ -27,14 +27,16 @@ export const AIDescriptionPanel: React.FC<AIDescriptionPanelProps> = ({
         bottom: '20px',
         left: '50%',
         transform: 'translateX(-50%)',
-        maxWidth: '400px',
-        zIndex: 9999,
+        maxWidth: '420px',
+        minWidth: '300px',
+        width: '90vw',
+        zIndex: 99999,
         pointerEvents: 'auto'
       }}
     >
       <CardContent className="p-3">
         <div className="flex items-center gap-2 mb-2">
-          <Bot className="h-4 w-4" style={{ color: 'var(--purple-primary)' }} />
+          <Bot className="h-4 w-4 flex-shrink-0" style={{ color: 'var(--purple-primary)' }} />
           <span 
             className="text-sm font-medium font-h2"
             style={{ 
@@ -53,7 +55,8 @@ export const AIDescriptionPanel: React.FC<AIDescriptionPanelProps> = ({
             color: 'var(--font-secondary)',
             fontFamily: 'var(--font-body-1)',
             fontWeight: 'var(--font-body-1-weight)',
-            fontSize: 'var(--font-body-1-size)'
+            fontSize: 'var(--font-body-1-size)',
+            wordWrap: 'break-word'
           }}
         >
           {description}

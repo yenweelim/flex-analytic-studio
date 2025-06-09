@@ -23,13 +23,21 @@ export const WidgetConfigurationPanel: React.FC<WidgetConfigurationPanelProps> =
   onClose
 }) => {
   const [mode, setMode] = useState<'ai' | 'sql'>('ai');
-  const [userInput, setUserInput] = useState('');
-  const [sqlInput, setSqlInput] = useState('');
+  const [userInput, setUserInput] = useState('Show monthly sales trends with revenue breakdown by product category over the last 12 months');
+  const [sqlInput, setSqlInput] = useState(`SELECT 
+  DATE_FORMAT(date, '%Y-%m') as month,
+  SUM(amount) as total_revenue,
+  COUNT(*) as sales_count,
+  product_category
+FROM sales 
+WHERE date >= DATE_SUB(NOW(), INTERVAL 12 MONTH)
+GROUP BY DATE_FORMAT(date, '%Y-%m'), product_category
+ORDER BY month, total_revenue DESC`);
 
   return (
-    <div className="space-y-4 h-full flex flex-col">
+    <div className="h-full flex flex-col overflow-hidden">
       {/* Mode selection */}
-      <div className="flex gap-2">
+      <div className="flex gap-2 mb-4 flex-shrink-0">
         <Button
           variant={mode === 'ai' ? 'default' : 'outline'}
           size="sm"
@@ -61,8 +69,8 @@ export const WidgetConfigurationPanel: React.FC<WidgetConfigurationPanelProps> =
       </div>
 
       {mode === 'ai' ? (
-        <div className="space-y-3 flex-1">
-          <div>
+        <div className="flex-1 flex flex-col min-h-0">
+          <div className="flex-1 min-h-0">
             <label 
               className="text-sm font-medium mb-1 block"
               style={{
@@ -78,7 +86,7 @@ export const WidgetConfigurationPanel: React.FC<WidgetConfigurationPanelProps> =
               value={userInput}
               onChange={(e) => setUserInput(e.target.value)}
               placeholder="e.g., Show monthly sales trends..."
-              className="w-full h-20 text-xs border rounded p-2 resize-none"
+              className="w-full flex-1 min-h-[80px] text-xs border rounded p-2 resize-none"
               style={{
                 borderColor: 'var(--outline-1)',
                 backgroundColor: 'var(--background-1)',
@@ -90,7 +98,7 @@ export const WidgetConfigurationPanel: React.FC<WidgetConfigurationPanelProps> =
           </div>
           <Button 
             size="sm" 
-            className="w-full"
+            className="w-full mt-3 flex-shrink-0"
             style={{
               backgroundColor: 'var(--purple-primary)',
               color: 'var(--font-alternate)'
@@ -100,8 +108,8 @@ export const WidgetConfigurationPanel: React.FC<WidgetConfigurationPanelProps> =
           </Button>
         </div>
       ) : (
-        <div className="space-y-3 flex-1">
-          <div>
+        <div className="flex-1 flex flex-col min-h-0">
+          <div className="flex-1 min-h-0">
             <label 
               className="text-sm font-medium mb-1 block"
               style={{
@@ -117,7 +125,7 @@ export const WidgetConfigurationPanel: React.FC<WidgetConfigurationPanelProps> =
               value={sqlInput}
               onChange={(e) => setSqlInput(e.target.value)}
               placeholder="SELECT month, revenue FROM sales..."
-              className="w-full h-20 text-xs font-mono border rounded p-2 resize-none"
+              className="w-full flex-1 min-h-[80px] text-xs font-mono border rounded p-2 resize-none overflow-auto"
               style={{
                 borderColor: 'var(--outline-1)',
                 backgroundColor: 'var(--background-1)',
@@ -129,7 +137,7 @@ export const WidgetConfigurationPanel: React.FC<WidgetConfigurationPanelProps> =
           </div>
           <Button 
             size="sm" 
-            className="w-full"
+            className="w-full mt-3 flex-shrink-0"
             style={{
               backgroundColor: 'var(--purple-primary)',
               color: 'var(--font-alternate)'
@@ -141,8 +149,8 @@ export const WidgetConfigurationPanel: React.FC<WidgetConfigurationPanelProps> =
       )}
 
       {/* Auto-generate AI description setting */}
-      <div className="pt-2 border-t" style={{ borderColor: 'var(--outline-1)' }}>
-        <div className="flex items-center justify-between mb-3">
+      <div className="pt-3 mt-3 border-t flex-shrink-0" style={{ borderColor: 'var(--outline-1)' }}>
+        <div className="flex items-center justify-between mb-2">
           <label 
             className="text-sm font-medium"
             style={{

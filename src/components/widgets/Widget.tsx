@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -37,7 +36,7 @@ export const Widget: React.FC<WidgetProps> = ({
   const [isHovering, setIsHovering] = useState(false);
   const [showFloatingPanel, setShowFloatingPanel] = useState(false);
   const [isSmallWidget, setIsSmallWidget] = useState(false);
-  const [autoGenerateAI, setAutoGenerateAI] = useState(true); // Default to true
+  const [autoGenerateAI, setAutoGenerateAI] = useState(true);
   
   const widgetRef = useRef<HTMLDivElement>(null);
 
@@ -46,7 +45,7 @@ export const Widget: React.FC<WidgetProps> = ({
     const checkSize = () => {
       if (widgetRef.current) {
         const rect = widgetRef.current.getBoundingClientRect();
-        setIsSmallWidget(rect.height < 300); // Consider small if height < 300px
+        setIsSmallWidget(rect.height < 350 || rect.width < 400);
       }
     };
 
@@ -75,14 +74,15 @@ export const Widget: React.FC<WidgetProps> = ({
   };
 
   const handleMagicClick = async () => {
+    setIsGenerating(true);
+    setAiDescription('');
+
+    // Always show floating panel for small widgets, inline for larger ones
     if (isSmallWidget) {
       setShowFloatingPanel(true);
     } else {
       setShowAIDescription(true);
     }
-    
-    setIsGenerating(true);
-    setAiDescription('');
 
     // Simulate AI streaming text
     const descriptions = [
@@ -103,13 +103,15 @@ export const Widget: React.FC<WidgetProps> = ({
 
   const handleMouseEnter = () => {
     setIsHovering(true);
-    if (isSmallWidget && aiDescription) {
+    // Show floating panel on hover only if there's content and widget is small
+    if (isSmallWidget && (aiDescription || isGenerating)) {
       setShowFloatingPanel(true);
     }
   };
 
   const handleMouseLeave = () => {
     setIsHovering(false);
+    // Hide floating panel when not hovering, but keep it if still generating
     if (isSmallWidget && !isGenerating) {
       setShowFloatingPanel(false);
     }
@@ -128,12 +130,12 @@ export const Widget: React.FC<WidgetProps> = ({
           isFlipped ? "rotate-y-180" : ""
         )}>
           {/* Front side - Normal widget view */}
-          <Card className={cn("absolute inset-0 h-full shadow-md backface-hidden", className)}
+          <Card className={cn("absolute inset-0 h-full shadow-md backface-hidden overflow-hidden", className)}
                 style={{ 
                   backgroundColor: 'var(--background-1)', 
                   border: `1px solid var(--outline-1)` 
                 }}>
-            <CardHeader className="p-3 pb-0">
+            <CardHeader className="p-3 pb-0 flex-shrink-0">
               <WidgetHeader
                 title={title}
                 isCollapsed={isCollapsed}
@@ -144,14 +146,16 @@ export const Widget: React.FC<WidgetProps> = ({
               />
             </CardHeader>
             
-            <CardContent className={cn("p-4 transition-all widget-content", 
+            <CardContent className={cn("p-4 transition-all widget-content flex-1 overflow-auto", 
               isCollapsed ? "h-0 p-0 overflow-hidden" : ""
             )}>
-              {children}
+              <div className="h-full overflow-auto">
+                {children}
+              </div>
               
-              {/* AI Description Box - only show if not small widget */}
+              {/* AI Description Box - only show if not small widget and has enough space */}
               {showAIDescription && !isSmallWidget && (
-                <div className="mt-4 p-3 rounded-lg" 
+                <div className="mt-4 p-3 rounded-lg flex-shrink-0" 
                      style={{ 
                        backgroundColor: 'var(--mina-background)', 
                        border: `1px solid var(--outline-2)` 
@@ -171,7 +175,7 @@ export const Widget: React.FC<WidgetProps> = ({
                     </span>
                   </div>
                   <div 
-                    className="text-sm min-h-[60px] font-body-1"
+                    className="text-sm min-h-[60px] font-body-1 max-h-[120px] overflow-y-auto"
                     style={{ 
                       color: 'var(--font-secondary)',
                       fontFamily: 'var(--font-body-1)',
@@ -193,12 +197,12 @@ export const Widget: React.FC<WidgetProps> = ({
           </Card>
 
           {/* Back side - Settings/Configuration view */}
-          <Card className="absolute inset-0 h-full shadow-md backface-hidden rotate-y-180"
+          <Card className="absolute inset-0 h-full shadow-md backface-hidden rotate-y-180 overflow-hidden"
                 style={{ 
                   backgroundColor: 'var(--background-1)', 
                   border: `1px solid var(--outline-1)` 
                 }}>
-            <CardHeader className="p-3 pb-2">
+            <CardHeader className="p-3 pb-2 flex-shrink-0">
               <div className="flex items-center justify-between">
                 <h3 
                   className="text-md font-medium font-h1"
@@ -223,7 +227,7 @@ export const Widget: React.FC<WidgetProps> = ({
               </div>
             </CardHeader>
             
-            <CardContent className="p-4 h-full overflow-hidden">
+            <CardContent className="p-4 flex-1 overflow-auto">
               <WidgetConfigurationPanel 
                 widgetId={id}
                 widgetType={type}
@@ -242,7 +246,7 @@ export const Widget: React.FC<WidgetProps> = ({
       <AIDescriptionPanel 
         description={aiDescription}
         isGenerating={isGenerating}
-        isVisible={showFloatingPanel}
+        isVisible={showFloatingPanel && (isHovering || isGenerating)}
       />
     </>
   );
